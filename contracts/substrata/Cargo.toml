@@ -1,0 +1,19 @@
+[package]
+name = "substrata"
+version = "0.1.0"
+edition = "2021"
+description = "Decentralized subscription payment protocol on Stellar Soroban"
+license = "MIT"
+repository = "https://github.com/your-org/Substrata-Contract"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+soroban-sdk = { version = "21.0.0" }
+
+[dev-dependencies]
+soroban-sdk = { version = "21.0.0", features = ["testutils"] }
+
+[features]
+testutils = ["soroban-sdk/testutils"]
