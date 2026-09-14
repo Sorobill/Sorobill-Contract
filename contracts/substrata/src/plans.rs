@@ -1,4 +1,4 @@
-use soroban_sdk::{Address, Env};
+use soroban_sdk::{Address, Env, String};
 
 use crate::{
     errors::SubstrataError,
@@ -10,6 +10,7 @@ use crate::{
 pub fn create_plan(
     e: &Env,
     merchant: Address,
+    name: String,
     price: i128,
     interval: BillingInterval,
     token: Address,
@@ -18,6 +19,9 @@ pub fn create_plan(
 
     if price <= 0 {
         return Err(SubstrataError::InvalidPrice);
+    }
+    if name.len() == 0 {
+        return Err(SubstrataError::InvalidPlanName);
     }
     if let BillingInterval::Custom(s) = &interval {
         if *s == 0 {
@@ -28,6 +32,7 @@ pub fn create_plan(
     let id = storage::next_plan_id(e);
     let plan = Plan {
         merchant: merchant.clone(),
+        name,
         price,
         interval,
         token,
@@ -82,6 +87,24 @@ pub fn deactivate_plan(
     }
 
     plan.active = false;
+    storage::save_plan(e, plan_id, &plan);
+    Ok(())
+}
+
+/// Reactivate a previously deactivated plan.
+pub fn reactivate_plan(
+    e: &Env,
+    merchant: Address,
+    plan_id: u64,
+) -> Result<(), SubstrataError> {
+    merchant.require_auth();
+
+    let mut plan = storage::load_plan(e, plan_id).ok_or(SubstrataError::PlanNotFound)?;
+    if plan.merchant != merchant {
+        return Err(SubstrataError::Unauthorized);
+    }
+
+    plan.active = true;
     storage::save_plan(e, plan_id, &plan);
     Ok(())
 }
