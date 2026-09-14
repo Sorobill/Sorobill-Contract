@@ -6,6 +6,7 @@ Substrata is an open-source, decentralized subscription payment protocol. It let
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-soroban-blueviolet)](https://soroban.stellar.org)
+[![Version](https://img.shields.io/badge/version-0.2.1-green)](DEPLOYMENTS.md)
 
 ---
 
