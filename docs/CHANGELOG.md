@@ -37,3 +37,15 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - On-chain events for all state transitions
 - Multi-asset support (any SEP-41 token)
 - Full integration test suite (10 tests)
+
+## [0.2.0] - 2026-09-14
+
+### Added
+- Plan `name` field on create
+- `get_admin`, `plan_count`, `reactivate_plan`
+- Deploy / init / build scripts and Makefile
+- TypeScript client types under `clients/`
+- `InvalidPlanName`, `AlreadyInitialized` errors
+
+### Changed
+- `initialize` now returns `Result` and rejects double-init
