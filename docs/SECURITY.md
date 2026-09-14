@@ -59,3 +59,8 @@ We follow **coordinated disclosure**:
 - The `admin` key is a single address in v0.1. Compromise of this key allows unauthorized billing triggers. A multi-sig upgrade is on the roadmap.
 - Subscribers must maintain a sufficient token allowance. The contract cannot enforce allowance renewal.
 - Persistent storage entries can expire if TTL is not extended. A keeper bot is recommended for production deployments.
+
+
+## Testnet deployments
+
+Testnet contracts are for integration testing only. Do not send mainnet funds to testnet addresses.
