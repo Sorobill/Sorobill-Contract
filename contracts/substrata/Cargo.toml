@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "Decentralized subscription payment protocol on Stellar Soroban"
 license = "MIT"
-repository = "https://github.com/your-org/Substrata-Contract"
+repository = "https://github.com/Recurraa/Substrata-Contract"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
