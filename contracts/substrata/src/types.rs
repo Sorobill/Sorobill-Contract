@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address, Symbol};
+use soroban_sdk::{contracttype, Address, String, Symbol};
 
 /// Supported billing intervals (in seconds).
 #[contracttype]
@@ -28,6 +28,8 @@ impl BillingInterval {
 #[derive(Clone, Debug)]
 pub struct Plan {
     pub merchant: Address,
+    /// Human-readable plan name (merchant-facing).
+    pub name: String,
     pub price: i128,
     pub interval: BillingInterval,
     /// Token contract address (multi-asset support).
