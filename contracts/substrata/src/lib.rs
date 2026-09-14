@@ -13,7 +13,7 @@ mod tests;
 use soroban_sdk::{contract, contractimpl, Address, Env, String};
 
 use errors::SubstrataError;
-use types::{BillingInterval, Plan, Subscription};
+use types::{BillingInterval, BillingOutcome, Plan, Subscription};
 
 #[contract]
 pub struct SubstrataContract;
@@ -136,7 +136,7 @@ impl SubstrataContract {
         caller: Address,
         subscriber: Address,
         plan_id: u64,
-    ) -> Result<(), SubstrataError> {
+    ) -> Result<BillingOutcome, SubstrataError> {
         payments::execute_billing(&e, caller, subscriber, plan_id)
     }
 }

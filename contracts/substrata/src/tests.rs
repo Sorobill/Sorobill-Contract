@@ -6,7 +6,7 @@ use soroban_sdk::{
     Address, Env, String,
 };
 
-use crate::{errors::SubstrataError, types::BillingInterval, SubstrataContract, SubstrataContractClient};
+use crate::{errors::SubstrataError, types::{BillingInterval, BillingOutcome}, SubstrataContract, SubstrataContractClient};
 
 fn plan_name(e: &Env) -> String {
     String::from_str(e, "Pro Plan")
@@ -310,12 +310,8 @@ fn test_insufficient_balance_increments_failed_attempts() {
         l.timestamp += BillingInterval::Monthly.as_secs() + 1;
     });
 
-    let err = client
-        .try_execute_billing(&admin, &subscriber, &plan_id)
-        .unwrap_err()
-        .unwrap();
-
-    assert_eq!(err, SubstrataError::InsufficientBalance.into());
+    let outcome = client.execute_billing(&admin, &subscriber, &plan_id);
+    assert_eq!(outcome, BillingOutcome::Failed);
     assert_eq!(
         client.get_subscription(&subscriber, &plan_id).failed_attempts,
         1
@@ -342,7 +338,8 @@ fn test_three_failures_auto_cancel() {
         e.ledger().with_mut(|l| {
             l.timestamp += BillingInterval::Daily.as_secs() + 1;
         });
-        let _ = client.try_execute_billing(&admin, &subscriber, &plan_id);
+        let outcome = client.execute_billing(&admin, &subscriber, &plan_id);
+        assert_eq!(outcome, BillingOutcome::Failed);
     }
 
     let sub = client.get_subscription(&subscriber, &plan_id);

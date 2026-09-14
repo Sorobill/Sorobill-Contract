@@ -37,6 +37,14 @@ pub struct Plan {
     pub active: bool,
 }
 
+/// Outcome of a billing attempt that was successfully recorded on-chain.
+#[contracttype]
+#[derive(Clone, Debug, PartialEq)]
+pub enum BillingOutcome {
+    Paid,
+    Failed,
+}
+
 /// A user's subscription to a plan.
 #[contracttype]
 #[derive(Clone, Debug)]

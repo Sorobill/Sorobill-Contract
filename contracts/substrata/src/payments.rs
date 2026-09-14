@@ -3,20 +3,24 @@ use soroban_sdk::{token, Address, Env};
 use crate::{
     errors::SubstrataError,
     storage,
-    types::Events,
+    types::{BillingOutcome, Events},
 };
 
 const MAX_FAILED_ATTEMPTS: u32 = 3;
 
 /// Execute billing for a subscriber. Called by the authorized backend (admin).
 /// Uses the token allowance the subscriber pre-approved to this contract.
+///
+/// Returns `BillingOutcome::Paid` on success or `BillingOutcome::Failed` when
+/// the charge could not complete but failure state was recorded on-chain.
+/// Returning `Ok` (not `Err`) for insufficient balance is intentional so the
+/// failed-attempt counter is committed (Soroban rolls back state on `Err`).
 pub fn execute_billing(
     e: &Env,
     caller: Address,
     subscriber: Address,
     plan_id: u64,
-) -> Result<(), SubstrataError> {
-    // Only admin may trigger billing
+) -> Result<BillingOutcome, SubstrataError> {
     let admin = storage::get_admin(e);
     if caller != admin {
         return Err(SubstrataError::Unauthorized);
@@ -35,7 +39,6 @@ pub fn execute_billing(
 
     let now = e.ledger().timestamp();
 
-    // Prevent double-charge: billing must be due
     if now < sub.next_billing {
         return Err(SubstrataError::BillingNotDue);
     }
@@ -43,7 +46,6 @@ pub fn execute_billing(
     let plan = storage::load_plan(e, plan_id).ok_or(SubstrataError::PlanNotFound)?;
     let token_client = token::Client::new(e, &plan.token);
 
-    // Check allowance / balance before transferring
     let balance = token_client.balance(&subscriber);
     if balance < plan.price {
         sub.failed_attempts += 1;
@@ -56,10 +58,9 @@ pub fn execute_billing(
             (Events::payment_fail(e), subscriber.clone(), plan_id),
             sub.failed_attempts,
         );
-        return Err(SubstrataError::InsufficientBalance);
+        return Ok(BillingOutcome::Failed);
     }
 
-    // Transfer from subscriber → merchant via pre-approved allowance
     token_client.transfer_from(
         &e.current_contract_address(),
         &subscriber,
@@ -77,5 +78,5 @@ pub fn execute_billing(
         plan.price,
     );
 
-    Ok(())
+    Ok(BillingOutcome::Paid)
 }
