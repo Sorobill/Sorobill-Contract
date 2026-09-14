@@ -1,0 +1,5 @@
+[build]
+target = "wasm32v1-none"
+
+[alias]
+t = "test -p substrata"
