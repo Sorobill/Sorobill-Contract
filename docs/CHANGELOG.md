@@ -49,3 +49,10 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 - `initialize` now returns `Result` and rejects double-init
+
+## [0.2.1] - 2026-09-14
+
+### Added
+- Live Stellar testnet deployment (see DEPLOYMENTS.md)
+- BillingOutcome for durable failed-attempt accounting
+- wasm32v1-none build via stellar contract build
