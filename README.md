@@ -331,6 +331,16 @@ Subscribers retain full custody of their funds. The contract can only pull funds
 
 ---
 
+## Sister repositories
+
+| Repo | Role |
+|------|------|
+| [Substrata-Contract](https://github.com/Recurraa/Substrata-Contract) | Soroban subscription protocol (this repo) |
+| [Substrata-Backend](https://github.com/Recurraa/Substrata-Backend) | Billing API, scheduler, webhooks |
+| [Substrata-Frontend](https://github.com/Recurraa/Substrata-Frontend) | Merchant + subscriber UI |
+
+---
+
 ## Contributing
 
 We welcome contributions of all kinds. See [CONTRIBUTING.md](docs/CONTRIBUTING.md) to get started.
