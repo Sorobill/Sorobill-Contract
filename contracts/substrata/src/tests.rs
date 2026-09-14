@@ -3,12 +3,14 @@
 use soroban_sdk::{
     testutils::{Address as _, Ledger},
     token::{Client as TokenClient, StellarAssetClient},
-    Address, Env,
+    Address, Env, String,
 };
 
 use crate::{errors::SubstrataError, types::BillingInterval, SubstrataContract, SubstrataContractClient};
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+fn plan_name(e: &Env) -> String {
+    String::from_str(e, "Pro Plan")
+}
 
 fn setup() -> (Env, SubstrataContractClient<'static>, Address, Address, Address) {
     let e = Env::default();
@@ -21,13 +23,11 @@ fn setup() -> (Env, SubstrataContractClient<'static>, Address, Address, Address)
     let merchant = Address::generate(&e);
     let subscriber = Address::generate(&e);
 
-    client.initialize(&admin);
+    client.initialize(&admin).unwrap();
 
     (e, client, admin, merchant, subscriber)
 }
 
-/// Deploy a native-style test token, mint `amount` to `to`, and approve the
-/// contract to spend on behalf of `to`.
 fn setup_token(
     e: &Env,
     contract_id: &Address,
@@ -41,14 +41,11 @@ fn setup_token(
     let asset_client = StellarAssetClient::new(e, &token_addr);
     asset_client.mint(to, &amount);
 
-    // Approve the Substrata contract to pull funds
     let token_client = TokenClient::new(e, &token_addr);
     token_client.approve(to, contract_id, &amount, &(e.ledger().sequence() + 10_000));
 
     token_addr
 }
-
-// ── Plan Tests ────────────────────────────────────────────────────────────────
 
 #[test]
 fn test_create_plan() {
@@ -56,13 +53,14 @@ fn test_create_plan() {
     let token = Address::generate(&e);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     assert_eq!(plan_id, 0);
     let plan = client.get_plan(&plan_id).unwrap();
     assert_eq!(plan.price, 100);
     assert!(plan.active);
+    assert_eq!(client.plan_count(), 1);
 }
 
 #[test]
@@ -71,11 +69,25 @@ fn test_create_plan_invalid_price() {
     let token = Address::generate(&e);
 
     let err = client
-        .try_create_plan(&merchant, &0, &BillingInterval::Monthly, &token)
+        .try_create_plan(&merchant, &plan_name(&e), &0, &BillingInterval::Monthly, &token)
         .unwrap_err()
         .unwrap();
 
     assert_eq!(err, SubstrataError::InvalidPrice.into());
+}
+
+#[test]
+fn test_create_plan_empty_name() {
+    let (e, client, _admin, merchant, _sub) = setup();
+    let token = Address::generate(&e);
+    let empty = String::from_str(&e, "");
+
+    let err = client
+        .try_create_plan(&merchant, &empty, &100, &BillingInterval::Monthly, &token)
+        .unwrap_err()
+        .unwrap();
+
+    assert_eq!(err, SubstrataError::InvalidPlanName.into());
 }
 
 #[test]
@@ -84,7 +96,7 @@ fn test_update_plan_price() {
     let token = Address::generate(&e);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.update_plan_price(&merchant, &plan_id, &200).unwrap();
@@ -97,7 +109,7 @@ fn test_deactivate_plan_blocks_subscribe() {
     let token = Address::generate(&e);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.deactivate_plan(&merchant, &plan_id).unwrap();
@@ -110,7 +122,20 @@ fn test_deactivate_plan_blocks_subscribe() {
     assert_eq!(err, SubstrataError::PlanInactive.into());
 }
 
-// ── Subscription Tests ────────────────────────────────────────────────────────
+#[test]
+fn test_reactivate_plan() {
+    let (e, client, _admin, merchant, subscriber) = setup();
+    let token = Address::generate(&e);
+
+    let plan_id = client
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
+        .unwrap();
+
+    client.deactivate_plan(&merchant, &plan_id).unwrap();
+    client.reactivate_plan(&merchant, &plan_id).unwrap();
+    client.subscribe(&subscriber, &plan_id).unwrap();
+    assert!(client.get_subscription(&subscriber, &plan_id).unwrap().active);
+}
 
 #[test]
 fn test_subscribe_and_get() {
@@ -118,7 +143,7 @@ fn test_subscribe_and_get() {
     let token = Address::generate(&e);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
@@ -135,7 +160,7 @@ fn test_double_subscribe_fails() {
     let token = Address::generate(&e);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
@@ -154,7 +179,7 @@ fn test_cancel_subscription() {
     let token = Address::generate(&e);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
@@ -170,7 +195,7 @@ fn test_pause_and_resume() {
     let token = Address::generate(&e);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
@@ -182,8 +207,6 @@ fn test_pause_and_resume() {
     assert!(!client.get_subscription(&subscriber, &plan_id).unwrap().paused);
 }
 
-// ── Payment Tests ─────────────────────────────────────────────────────────────
-
 #[test]
 fn test_billing_not_due() {
     let (e, client, admin, merchant, subscriber) = setup();
@@ -191,12 +214,11 @@ fn test_billing_not_due() {
     let token = setup_token(&e, &contract_id, &subscriber, 1_000);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
 
-    // Billing is not due yet (next_billing = now + interval)
     let err = client
         .try_execute_billing(&admin, &subscriber, &plan_id)
         .unwrap_err()
@@ -212,12 +234,11 @@ fn test_successful_billing() {
     let token = setup_token(&e, &contract_id, &subscriber, 1_000);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
 
-    // Advance ledger past billing interval
     e.ledger().with_mut(|l| {
         l.timestamp += BillingInterval::Monthly.as_secs() + 1;
     });
@@ -233,11 +254,10 @@ fn test_successful_billing() {
 fn test_insufficient_balance_increments_failed_attempts() {
     let (e, client, admin, merchant, subscriber) = setup();
     let contract_id = client.address.clone();
-    // Give subscriber only 50, plan costs 100
     let token = setup_token(&e, &contract_id, &subscriber, 50);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
@@ -265,7 +285,7 @@ fn test_three_failures_auto_cancel() {
     let token = setup_token(&e, &contract_id, &subscriber, 50);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Daily, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Daily, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
@@ -288,7 +308,7 @@ fn test_billing_blocked_while_paused() {
     let token = setup_token(&e, &contract_id, &subscriber, 1_000);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
@@ -314,7 +334,7 @@ fn test_unauthorized_billing_rejected() {
     let rando = Address::generate(&e);
 
     let plan_id = client
-        .create_plan(&merchant, &100, &BillingInterval::Monthly, &token)
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Monthly, &token)
         .unwrap();
 
     client.subscribe(&subscriber, &plan_id).unwrap();
@@ -325,6 +345,57 @@ fn test_unauthorized_billing_rejected() {
 
     let err = client
         .try_execute_billing(&rando, &subscriber, &plan_id)
+        .unwrap_err()
+        .unwrap();
+
+    assert_eq!(err, SubstrataError::Unauthorized.into());
+}
+
+#[test]
+fn test_get_admin() {
+    let (_e, client, admin, _merchant, _sub) = setup();
+    assert_eq!(client.get_admin().unwrap(), admin);
+}
+
+#[test]
+fn test_double_initialize_fails() {
+    let (e, client, _admin, _merchant, _sub) = setup();
+    let other = Address::generate(&e);
+    let err = client.try_initialize(&other).unwrap_err().unwrap();
+    assert_eq!(err, SubstrataError::AlreadyInitialized.into());
+}
+
+#[test]
+fn test_custom_interval_zero_rejected() {
+    let (e, client, _admin, merchant, _sub) = setup();
+    let token = Address::generate(&e);
+
+    let err = client
+        .try_create_plan(
+            &merchant,
+            &plan_name(&e),
+            &100,
+            &BillingInterval::Custom(0),
+            &token,
+        )
+        .unwrap_err()
+        .unwrap();
+
+    assert_eq!(err, SubstrataError::InvalidInterval.into());
+}
+
+#[test]
+fn test_unauthorized_price_update() {
+    let (e, client, _admin, merchant, _sub) = setup();
+    let token = Address::generate(&e);
+    let other = Address::generate(&e);
+
+    let plan_id = client
+        .create_plan(&merchant, &plan_name(&e), &100, &BillingInterval::Weekly, &token)
+        .unwrap();
+
+    let err = client
+        .try_update_plan_price(&other, &plan_id, &50)
         .unwrap_err()
         .unwrap();
 
