@@ -481,3 +481,14 @@ fn test_custom_interval_billing() {
     let outcome = client.execute_billing(&admin, &subscriber, &plan_id);
     assert_eq!(outcome, BillingOutcome::Paid);
 }
+
+
+#[test]
+fn test_plan_count_increments() {
+    let (e, client, _admin, merchant, _sub) = setup();
+    let token = Address::generate(&e);
+    assert_eq!(client.plan_count(), 0);
+    client.create_plan(&merchant, &plan_name(&e), &10, &BillingInterval::Daily, &token);
+    client.create_plan(&merchant, &plan_name(&e), &20, &BillingInterval::Weekly, &token);
+    assert_eq!(client.plan_count(), 2);
+}
