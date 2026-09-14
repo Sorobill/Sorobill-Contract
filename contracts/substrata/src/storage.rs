@@ -8,8 +8,16 @@ pub fn set_admin(e: &Env, admin: &Address) {
     e.storage().instance().set(&DataKey::Admin, admin);
 }
 
+pub fn has_admin(e: &Env) -> bool {
+    e.storage().instance().has(&DataKey::Admin)
+}
+
 pub fn get_admin(e: &Env) -> Address {
     e.storage().instance().get(&DataKey::Admin).unwrap()
+}
+
+pub fn plan_count(e: &Env) -> u64 {
+    e.storage().instance().get(&DataKey::PlanCount).unwrap_or(0)
 }
 
 // ── Plans ────────────────────────────────────────────────────────────────────
