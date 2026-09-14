@@ -281,10 +281,12 @@ fn execute_billing(
     caller: Address,
     subscriber: Address,
     plan_id: u64,
-) -> Result<(), SubstrataError>
+) -> Result<BillingOutcome, SubstrataError>
 ```
 
 Triggers a billing cycle. Only the `admin` may call this. The contract uses `transfer_from` to move `plan.price` tokens from `subscriber` to `plan.merchant`.
+
+Returns `BillingOutcome::Paid` or `BillingOutcome::Failed`. Insufficient balance returns `Ok(Failed)` (not `Err`) so the on-chain `failed_attempts` counter is committed.
 
 **Safety checks performed:**
 1. Caller must be admin
@@ -292,7 +294,7 @@ Triggers a billing cycle. Only the `admin` may call this. The contract uses `tra
 3. `now >= next_billing` (prevents double-charge)
 4. Subscriber balance must be ≥ plan price
 
-On failure, `failed_attempts` is incremented. At 3 failures the subscription is auto-cancelled.
+On insufficient balance, `failed_attempts` is incremented. At 3 failures the subscription is auto-cancelled.
 
 ---
 
