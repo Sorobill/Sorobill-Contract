@@ -458,3 +458,26 @@ fn test_unauthorized_price_update() {
 
     assert_eq!(err, SubstrataError::Unauthorized.into());
 }
+
+
+#[test]
+fn test_custom_interval_billing() {
+    let (e, client, admin, merchant, subscriber) = setup();
+    let contract_id = client.address.clone();
+    let token = setup_token(&e, &contract_id, &subscriber, 1_000);
+
+    let plan_id = client.create_plan(
+        &merchant,
+        &plan_name(&e),
+        &25,
+        &BillingInterval::Custom(60),
+        &token,
+    );
+
+    client.subscribe(&subscriber, &plan_id);
+    e.ledger().with_mut(|l| {
+        l.timestamp += 61;
+    });
+    let outcome = client.execute_billing(&admin, &subscriber, &plan_id);
+    assert_eq!(outcome, BillingOutcome::Paid);
+}
