@@ -19,3 +19,6 @@ keys/
 # Build artifacts
 *.wasm
 !fixtures/*.wasm
+
+# Soroban test snapshots
+**/test_snapshots/
