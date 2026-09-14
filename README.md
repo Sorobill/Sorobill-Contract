@@ -165,13 +165,14 @@ Sets the billing backend address. Must be called once after deployment. The `adm
 fn create_plan(
     e: Env,
     merchant: Address,
+    name: String,
     price: i128,
     interval: BillingInterval,
     token: Address,
 ) -> Result<u64, SubstrataError>
 ```
 
-Creates a new subscription plan. Returns the plan ID. `merchant` must sign.
+Creates a new subscription plan with a human-readable `name`. Returns the plan ID. `merchant` must sign.
 
 **`BillingInterval` variants:**
 - `Daily` — 86,400 seconds
@@ -246,6 +247,30 @@ fn get_subscription(e: Env, subscriber: Address, plan_id: u64) -> Result<Subscri
 
 ---
 
+### Admin & introspection
+
+#### `get_admin`
+
+```rust
+fn get_admin(e: Env) -> Result<Address, SubstrataError>
+```
+
+#### `plan_count`
+
+```rust
+fn plan_count(e: Env) -> u64
+```
+
+#### `reactivate_plan`
+
+```rust
+fn reactivate_plan(e: Env, merchant: Address, plan_id: u64) -> Result<(), SubstrataError>
+```
+
+Re-enables a deactivated plan so new subscriptions can be created again.
+
+---
+
 ### Payment Execution
 
 #### `execute_billing`
@@ -317,6 +342,8 @@ Subscribers retain full custody of their funds. The contract can only pull funds
 | 11 | `SubscriptionPaused` | Billing attempted on a paused subscription |
 | 12 | `AlreadyPaused` | Subscription is already paused |
 | 13 | `NotPaused` | Resume called on a subscription that is not paused |
+| 14 | `InvalidPlanName` | Plan name must be non-empty |
+| 15 | `AlreadyInitialized` | `initialize` was already called |
 
 ---
 
