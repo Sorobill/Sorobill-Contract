@@ -17,4 +17,6 @@ pub enum SubstrataError {
     SubscriptionPaused = 11,
     AlreadyPaused = 12,
     NotPaused = 13,
+    InvalidPlanName = 14,
+    AlreadyInitialized = 15,
 }
