@@ -10,7 +10,7 @@ mod types;
 #[cfg(test)]
 mod tests;
 
-use soroban_sdk::{contract, contractimpl, Address, Env};
+use soroban_sdk::{contract, contractimpl, Address, Env, String};
 
 use errors::SubstrataError;
 use types::{BillingInterval, Plan, Subscription};
@@ -23,9 +23,26 @@ impl SubstrataContract {
     // ── Initialisation ────────────────────────────────────────────────────────
 
     /// Set the admin (billing backend). Must be called once after deployment.
-    pub fn initialize(e: Env, admin: Address) {
+    pub fn initialize(e: Env, admin: Address) -> Result<(), SubstrataError> {
+        if storage::has_admin(&e) {
+            return Err(SubstrataError::AlreadyInitialized);
+        }
         admin.require_auth();
         storage::set_admin(&e, &admin);
+        Ok(())
+    }
+
+    /// Return the billing admin address.
+    pub fn get_admin(e: Env) -> Result<Address, SubstrataError> {
+        if !storage::has_admin(&e) {
+            return Err(SubstrataError::Unauthorized);
+        }
+        Ok(storage::get_admin(&e))
+    }
+
+    /// Total number of plans ever created.
+    pub fn plan_count(e: Env) -> u64 {
+        storage::plan_count(&e)
     }
 
     // ── Plan Management ───────────────────────────────────────────────────────
@@ -33,11 +50,12 @@ impl SubstrataContract {
     pub fn create_plan(
         e: Env,
         merchant: Address,
+        name: String,
         price: i128,
         interval: BillingInterval,
         token: Address,
     ) -> Result<u64, SubstrataError> {
-        plans::create_plan(&e, merchant, price, interval, token)
+        plans::create_plan(&e, merchant, name, price, interval, token)
     }
 
     pub fn update_plan_price(
@@ -55,6 +73,14 @@ impl SubstrataContract {
         plan_id: u64,
     ) -> Result<(), SubstrataError> {
         plans::deactivate_plan(&e, merchant, plan_id)
+    }
+
+    pub fn reactivate_plan(
+        e: Env,
+        merchant: Address,
+        plan_id: u64,
+    ) -> Result<(), SubstrataError> {
+        plans::reactivate_plan(&e, merchant, plan_id)
     }
 
     pub fn get_plan(e: Env, plan_id: u64) -> Result<Plan, SubstrataError> {
