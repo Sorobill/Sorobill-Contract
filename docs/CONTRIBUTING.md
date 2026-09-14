@@ -177,3 +177,8 @@ For large changes, open a discussion first before writing code.
 **Do not open public issues for security vulnerabilities.**
 
 See [SECURITY.md](SECURITY.md) for the responsible disclosure process.
+
+
+## Build
+
+Prefer `stellar contract build` (or `make build`) so the wasm targets `wasm32v1-none`.
