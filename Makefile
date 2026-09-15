@@ -1,8 +1,12 @@
-.PHONY: build test clean deploy init fmt check
+.PHONY: build test check verify fmt clean deploy init
 
 CONTRACT := sorobill
 NETWORK ?= testnet
 SOURCE ?= sorobill-admin
+
+## Default: test + check (fast CI path)
+verify: test check
+	@echo "OK — contract verify passed"
 
 build:
 	@if command -v stellar >/dev/null 2>&1; then \
