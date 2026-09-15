@@ -9,12 +9,13 @@ Record of on-chain Sorobill contract deployments.
 | Network | Stellar Testnet |
 | Passphrase | `Test SDF Network ; September 2015` |
 | RPC | `https://soroban-testnet.stellar.org` |
-| Contract ID | `CDROWFTFKXEMSWGAOFAWGVCNSPDDGUAW2NSEW2O5JCHUSW6P6RCU2C2E` |
-| Admin | `GDAGKJZDVIQU2IOSB7M6EI4NBFP6VGI6E2C7P7ARRM4ZPSFGAMKQ4J3Q` |
-| Wasm hash | `c354c6f0880b1f4b244c41726581914b82dd7317b8c2d1266c032e547482a1e7` |
-| Deploy tx | [14fff0f2…](https://stellar.expert/explorer/testnet/tx/14fff0f2511db1d5f56110146292656a8f71a3b582ff73b240fe4b43319c8e74) |
-| Deployed at | 2026-09-14 |
-| Lab | [Open in Stellar Lab](https://lab.stellar.org/r/testnet/contract/CDROWFTFKXEMSWGAOFAWGVCNSPDDGUAW2NSEW2O5JCHUSW6P6RCU2C2E) |
+| Contract ID | `CDENNEELMOUKIJGCSQUQ535FP53KRKNYA2PO7TOCI6O6IZVWZBYFML4W` |
+| Admin | `GALOSD22UK656K2CP4VP4I45I3GSAZQXSEBFSO6CPZTCLU2QBJXZSZFI` |
+| Wasm hash | `760bf344a0d874dfe3b7b47326d05bfd7c699880a789d4ae560c1807aee7008c` |
+| Deploy tx | [5f1defa9…](https://stellar.expert/explorer/testnet/tx/5f1defa93b781d6c0957e743b0f0cbe23d63fec983bb79290426ecbc96af67e1) |
+| Init tx | [9a83f193…](https://stellar.expert/explorer/testnet/tx/9a83f193b88fffbff06a3fd2bcd0c542260669cef8241a4f843d632f64e9d120) |
+| Deployed at | 2026-09-15 |
+| Lab | [Open in Stellar Lab](https://lab.stellar.org/r/testnet/contract/CDENNEELMOUKIJGCSQUQ535FP53KRKNYA2PO7TOCI6O6IZVWZBYFML4W) |
 
 ## Mainnet
 
