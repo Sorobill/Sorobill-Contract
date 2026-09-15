@@ -1,10 +1,14 @@
 # Storage layout
 
-| Key | Persistence | Purpose |
-|-----|-------------|---------|
-| Admin | instance | Billing backend address |
-| PlanCount | instance | Monotonic plan id counter |
-| Plan(id) | persistent | Plan record |
-| Sub(subscriber, plan_id) | persistent | Subscription record |
+## Instance
+| Key | Type | Notes |
+|---|---|---|
+| `Admin` | Address | Billing backend |
+| `PlanCount` | u64 | Next plan id / total created |
+| `GraceSecs` | u64 | Global grace; defaults to 172800 if unset |
 
-Persistent entries should be extended with TTL bumping in a future release for long-lived mainnet deployments.
+## Persistent
+| Key | Type | Notes |
+|---|---|---|
+| `Plan(u64)` | Plan | Includes `name`, `description`, price, interval, token, active |
+| `Sub(Address, u64)` | Subscription | Includes `grace_deadline`, pause/fail counters |
