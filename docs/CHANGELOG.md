@@ -10,12 +10,27 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Planned
-- Grace period before auto-cancel on billing failure
 - Prorated billing when plan price changes mid-cycle
 - Subscriber-side self-billing trigger
 - Multi-sig admin / DAO governance
 - Contract upgradeability via `update_current_contract_wasm`
-- TypeScript SDK / client library
+- Migrate events to `#[contractevent]`
+
+---
+
+## [0.3.0] — 2026-09-15
+
+### Added
+- Plan `description` field on `create_plan`
+- Configurable grace period (`set_grace_period` / `get_grace_period`)
+- `Subscription.grace_deadline` for delayed auto-cancel
+- `version` and `is_subscribed` view functions
+- Shared `constants` module (`MAX_FAILED_ATTEMPTS`, `DEFAULT_GRACE_SECS`)
+- Grace period documentation and expanded tests
+
+### Changed
+- After 3 failed charges, subscriptions enter grace (default 48h) instead of immediate cancel
+- Set grace to `0` to restore immediate auto-cancel
 
 ---
 
