@@ -1,8 +1,16 @@
-# Exported contract functions
+# Exported functions
 
-From `stellar contract build` summary:
+## Admin / meta
+- `initialize`, `get_admin`, `version`
+- `set_grace_period`, `get_grace_period`
+- `plan_count`, `is_subscribed`
 
-- initialize, get_admin, plan_count
-- create_plan, update_plan_price, deactivate_plan, reactivate_plan, get_plan
-- subscribe, cancel, pause, resume, get_subscription
-- execute_billing
+## Plans
+- `create_plan(merchant, name, description, price, interval, token)`
+- `update_plan_price`, `deactivate_plan`, `reactivate_plan`, `get_plan`
+
+## Subscriptions
+- `subscribe`, `cancel`, `pause`, `resume`, `get_subscription`
+
+## Billing
+- `execute_billing` → `BillingOutcome`
