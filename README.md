@@ -6,7 +6,7 @@ Sorobill is an open-source, decentralized subscription payment protocol. It lets
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-soroban-blueviolet)](https://soroban.stellar.org)
-[![Version](https://img.shields.io/badge/version-0.2.1-green)](DEPLOYMENTS.md)
+[![Version](https://img.shields.io/badge/version-0.3.0-green)](DEPLOYMENTS.md)
 
 ---
 
@@ -29,6 +29,8 @@ Sorobill is an open-source, decentralized subscription payment protocol. It lets
 - [Authorization Model](#authorization-model)
 - [Events](#events)
 - [Error Reference](#error-reference)
+- [Grace period](docs/GRACE_PERIOD.md)
+- [Threat model](docs/THREAT_MODEL.md)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [Security](#security)
@@ -59,6 +61,9 @@ No custodial wallets. No wrapped assets. No off-chain state.
 | Allowance-based payment execution | ✅ |
 | Double-charge prevention | ✅ |
 | Auto-cancel after 3 failed billing attempts | ✅ |
+| Configurable grace period before auto-cancel | ✅ |
+| Plan description on-chain | ✅ |
+| `version` / `is_subscribed` views | ✅ |
 | On-chain events for all state changes | ✅ |
 | Upgradeable plan pricing | ✅ |
 
