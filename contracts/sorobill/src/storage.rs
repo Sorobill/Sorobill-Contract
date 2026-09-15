@@ -48,3 +48,16 @@ pub fn load_sub(e: &Env, subscriber: &Address, plan_id: u64) -> Option<Subscript
         .persistent()
         .get(&DataKey::Sub(subscriber.clone(), plan_id))
 }
+
+// ── Grace period ──────────────────────────────────────────────────────────────
+
+pub fn set_grace_secs(e: &Env, secs: u64) {
+    e.storage().instance().set(&DataKey::GraceSecs, &secs);
+}
+
+pub fn get_grace_secs(e: &Env) -> u64 {
+    e.storage()
+        .instance()
+        .get(&DataKey::GraceSecs)
+        .unwrap_or(crate::constants::DEFAULT_GRACE_SECS)
+}
