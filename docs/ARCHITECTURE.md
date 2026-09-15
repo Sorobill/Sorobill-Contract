@@ -183,6 +183,8 @@ Events are published via `env.events().publish(topics, data)`. Topics are tuples
 |---|---|---|
 | `plan_created` | `(symbol, merchant, plan_id)` | `price: i128` |
 | `plan_updated` | `(symbol, plan_id)` | `new_price: i128` |
+| `plan_deactivated` | `(symbol, merchant, plan_id)` | `false` |
+| `plan_reactivated` | `(symbol, merchant, plan_id)` | `true` |
 | `subscribed` | `(symbol, subscriber, plan_id)` | `timestamp: u64` |
 | `payment_executed` | `(symbol, subscriber, plan_id)` | `amount: i128` |
 | `payment_failed` | `(symbol, subscriber, plan_id)` | `failed_attempts: u32` |
