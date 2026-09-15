@@ -522,7 +522,7 @@ fn test_default_grace_period() {
 
 #[test]
 fn test_set_grace_period_admin_only() {
-    let (e, client, admin, merchant, _sub) = setup();
+    let (_e, client, admin, merchant, _sub) = setup();
 
     client.set_grace_period(&admin, &86_400);
     assert_eq!(client.get_grace_period(), 86_400);
