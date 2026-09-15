@@ -373,7 +373,7 @@ Subscribers retain full custody of their funds. The contract can only pull funds
 |------|------|
 | [Sorobill-Contract](https://github.com/Sorobill/Sorobill-Contract) | Soroban subscription protocol (this repo) |
 | [Sorobill-Backend](https://github.com/Sorobill/Sorobill-Backend) | Billing API, scheduler, webhooks |
-| [Sorobill-App](https://github.com/Sorobill/Sorobill-App) | Merchant + subscriber UI |
+| [Sorobill-App](https://github.com/Sorobill/Sorobill-App) | Merchant + subscriber UI — [live](https://sorobill-app.vercel.app) |
 
 ---
 
