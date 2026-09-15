@@ -212,3 +212,7 @@ Events are published via `env.events().publish(topics, data)`. Topics are tuples
 | No TTL auto-extension | Bundle `extend_ttl` into `execute_billing` |
 | No subscriber self-billing | Optional self-trigger function |
 | No contract upgradeability | Soroban upgrade path via `update_current_contract_wasm` |
+
+## Grace period (0.3)
+
+See [GRACE_PERIOD.md](GRACE_PERIOD.md). Storage key `GraceSecs` is instance-scoped; each subscription stores `grace_deadline`.
