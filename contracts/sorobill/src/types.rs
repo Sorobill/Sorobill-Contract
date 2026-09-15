@@ -30,6 +30,8 @@ pub struct Plan {
     pub merchant: Address,
     /// Human-readable plan name (merchant-facing).
     pub name: String,
+    /// Optional description; empty string when unset.
+    pub description: String,
     pub price: i128,
     pub interval: BillingInterval,
     /// Token contract address (multi-asset support).
@@ -56,6 +58,8 @@ pub struct Subscription {
     pub failed_attempts: u32,
     pub last_charged: u64,
     pub paused: bool,
+    /// Unix timestamp after which a failed sub is cancelled; 0 = no grace active.
+    pub grace_deadline: u64,
 }
 
 /// Storage key namespace.
@@ -66,6 +70,8 @@ pub enum DataKey {
     PlanCount,
     Plan(u64),
     Sub(Address, u64), // (subscriber, plan_id)
+    /// Global grace seconds after max failed attempts (admin-configurable).
+    GraceSecs,
 }
 
 /// Event topics — kept as Symbol constants for gas efficiency.
