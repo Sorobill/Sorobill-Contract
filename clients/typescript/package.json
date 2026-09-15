@@ -1,0 +1,8 @@
+{
+  "name": "@sorobill/contract-types",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Stub TS types for Sorobill contract 0.3.0",
+  "main": "src/types.ts",
+  "types": "src/types.ts"
+}
