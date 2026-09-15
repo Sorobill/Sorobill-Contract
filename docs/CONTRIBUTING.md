@@ -182,3 +182,7 @@ See [SECURITY.md](SECURITY.md) for the responsible disclosure process.
 ## Build
 
 Prefer `stellar contract build` (or `make build`) so the wasm targets `wasm32v1-none`.
+
+## API changes
+
+When extending `create_plan`, keep TypeScript stubs in `clients/typescript` and tests in sync. Prefer `stellar contract build` for wasm artifacts.
