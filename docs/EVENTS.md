@@ -9,6 +9,8 @@ Sorobill emits classic Soroban topics via `Env::events().publish`
 |---|---|---|
 | `plan_created` | Merchant creates a plan | topics: merchant, plan_id; data: price |
 | `plan_updated` | Merchant updates price | topics: plan_id; data: new_price |
+| `plan_deactivated` | Merchant deactivates a plan | topics: merchant, plan_id; data: false |
+| `plan_reactivated` | Merchant reactivates a plan | topics: merchant, plan_id; data: true |
 | `subscribed` | User subscribes | topics: subscriber, plan_id; data: timestamp |
 | `sub_cancelled` | Cancel or grace expiry | topics: subscriber, plan_id; data: timestamp |
 | `sub_paused` | User pauses | topics: subscriber, plan_id; data: timestamp |
