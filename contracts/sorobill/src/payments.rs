@@ -1,12 +1,11 @@
 use soroban_sdk::{token, Address, Env};
 
 use crate::{
+    constants::MAX_FAILED_ATTEMPTS,
     errors::SorobillError,
     storage,
     types::{BillingOutcome, Events},
 };
-
-const MAX_FAILED_ATTEMPTS: u32 = 3;
 
 /// Execute billing for a subscriber. Called by the authorized backend (admin).
 /// Uses the token allowance the subscriber pre-approved to this contract.
@@ -39,6 +38,18 @@ pub fn execute_billing(
 
     let now = e.ledger().timestamp();
 
+    // Grace expired → cancel on this attempt
+    if sub.grace_deadline > 0 && now >= sub.grace_deadline {
+        sub.active = false;
+        sub.grace_deadline = 0;
+        storage::save_sub(e, &sub);
+        e.events().publish(
+            (Events::cancelled(e), subscriber.clone(), plan_id),
+            now,
+        );
+        return Ok(BillingOutcome::Failed);
+    }
+
     if now < sub.next_billing {
         return Err(SorobillError::BillingNotDue);
     }
@@ -50,7 +61,12 @@ pub fn execute_billing(
     if balance < plan.price {
         sub.failed_attempts += 1;
         if sub.failed_attempts >= MAX_FAILED_ATTEMPTS {
-            sub.active = false;
+            let grace = storage::get_grace_secs(e);
+            if grace == 0 {
+                sub.active = false;
+            } else if sub.grace_deadline == 0 {
+                sub.grace_deadline = now + grace;
+            }
         }
         storage::save_sub(e, &sub);
 
@@ -71,6 +87,7 @@ pub fn execute_billing(
     sub.last_charged = now;
     sub.next_billing = now + plan.interval.as_secs();
     sub.failed_attempts = 0;
+    sub.grace_deadline = 0;
     storage::save_sub(e, &sub);
 
     e.events().publish(
