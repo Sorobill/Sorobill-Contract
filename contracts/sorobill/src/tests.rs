@@ -639,3 +639,30 @@ fn test_successful_billing_clears_grace() {
     assert_eq!(sub.failed_attempts, 0);
     assert_eq!(sub.grace_deadline, 0);
 }
+
+
+#[test]
+fn test_empty_description_allowed() {
+    let (e, client, _admin, merchant, _sub) = setup();
+    let token = Address::generate(&e);
+    let empty = String::from_str(&e, "");
+    let plan_id = client.create_plan(
+        &merchant,
+        &plan_name(&e),
+        &empty,
+        &100,
+        &BillingInterval::Monthly,
+        &token,
+    );
+    assert_eq!(client.get_plan(&plan_id).description, empty);
+}
+
+#[test]
+fn test_interval_secs_helpers() {
+    assert_eq!(BillingInterval::Daily.as_secs(), 86_400);
+    assert_eq!(BillingInterval::Weekly.as_secs(), 604_800);
+    assert_eq!(BillingInterval::Monthly.as_secs(), 2_592_000);
+    assert_eq!(BillingInterval::Yearly.as_secs(), 31_536_000);
+    assert_eq!(BillingInterval::Custom(42).as_secs(), 42);
+}
+
