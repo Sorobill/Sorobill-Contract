@@ -2,7 +2,7 @@
 set -euo pipefail
 
 NETWORK="testnet"
-SOURCE="substrata-admin"
+SOURCE="sorobill-admin"
 WASM_PATH=""
 
 usage() {
@@ -26,18 +26,18 @@ fi
 
 if [[ -z "$WASM_PATH" ]]; then
   for candidate in \
-    target/wasm32v1-none/release/substrata.wasm \
-    target/wasm32-unknown-unknown/release/substrata.wasm; do
+    target/wasm32v1-none/release/sorobill.wasm \
+    target/wasm32-unknown-unknown/release/sorobill.wasm; do
     if [[ -f "$candidate" ]]; then WASM_PATH="$candidate"; break; fi
   done
 fi
 
 if [[ -z "${WASM_PATH}" || ! -f "$WASM_PATH" ]]; then
   echo "Building contract wasm..."
-  stellar contract build || cargo build --target wasm32-unknown-unknown --release -p substrata
+  stellar contract build || cargo build --target wasm32-unknown-unknown --release -p sorobill
   for candidate in \
-    target/wasm32v1-none/release/substrata.wasm \
-    target/wasm32-unknown-unknown/release/substrata.wasm; do
+    target/wasm32v1-none/release/sorobill.wasm \
+    target/wasm32-unknown-unknown/release/sorobill.wasm; do
     if [[ -f "$candidate" ]]; then WASM_PATH="$candidate"; break; fi
   done
 fi
@@ -47,10 +47,10 @@ CONTRACT_ID=$(stellar contract deploy \
   --wasm "$WASM_PATH" \
   --source "$SOURCE" \
   --network "$NETWORK" \
-  --alias substrata)
+  --alias sorobill)
 
 echo ""
-echo "Deployed Substrata contract"
+echo "Deployed Sorobill contract"
 echo "  Network:     $NETWORK"
 echo "  Contract ID: $CONTRACT_ID"
 echo ""

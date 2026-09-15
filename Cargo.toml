@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["contracts/substrata"]
+members = ["contracts/sorobill"]
 
 [workspace.dependencies]
 soroban-sdk = { version = "23.0.2", features = ["testutils"] }

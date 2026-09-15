@@ -1,6 +1,6 @@
-# Substrata Deployments
+# Sorobill Deployments
 
-Record of on-chain Substrata contract deployments.
+Record of on-chain Sorobill contract deployments.
 
 ## Testnet
 
@@ -26,6 +26,6 @@ After deploying:
 
 ```bash
 make build
-make deploy NETWORK=testnet SOURCE=substrata-admin
-./scripts/init.sh --network testnet --source substrata-admin --id <CONTRACT_ID>
+make deploy NETWORK=testnet SOURCE=sorobill-admin
+./scripts/init.sh --network testnet --source sorobill-admin --id <CONTRACT_ID>
 ```

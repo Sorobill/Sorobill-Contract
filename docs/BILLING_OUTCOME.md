@@ -1,6 +1,6 @@
 # BillingOutcome
 
-`execute_billing` returns `Result<BillingOutcome, SubstrataError>`.
+`execute_billing` returns `Result<BillingOutcome, SorobillError>`.
 
 | Variant | Meaning |
 |---------|---------|

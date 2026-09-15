@@ -1,7 +1,7 @@
 use soroban_sdk::{Address, Env};
 
 use crate::{
-    errors::SubstrataError,
+    errors::SorobillError,
     storage,
     types::{Events, Subscription},
 };
@@ -11,16 +11,16 @@ pub fn subscribe(
     e: &Env,
     subscriber: Address,
     plan_id: u64,
-) -> Result<(), SubstrataError> {
+) -> Result<(), SorobillError> {
     subscriber.require_auth();
 
-    let plan = storage::load_plan(e, plan_id).ok_or(SubstrataError::PlanNotFound)?;
+    let plan = storage::load_plan(e, plan_id).ok_or(SorobillError::PlanNotFound)?;
     if !plan.active {
-        return Err(SubstrataError::PlanInactive);
+        return Err(SorobillError::PlanInactive);
     }
 
     if storage::load_sub(e, &subscriber, plan_id).is_some() {
-        return Err(SubstrataError::AlreadySubscribed);
+        return Err(SorobillError::AlreadySubscribed);
     }
 
     let now = e.ledger().timestamp();
@@ -46,13 +46,13 @@ pub fn cancel(
     e: &Env,
     subscriber: Address,
     plan_id: u64,
-) -> Result<(), SubstrataError> {
+) -> Result<(), SorobillError> {
     subscriber.require_auth();
 
     let mut sub = storage::load_sub(e, &subscriber, plan_id)
-        .ok_or(SubstrataError::SubscriptionNotFound)?;
+        .ok_or(SorobillError::SubscriptionNotFound)?;
     if !sub.active {
-        return Err(SubstrataError::SubscriptionInactive);
+        return Err(SorobillError::SubscriptionInactive);
     }
 
     sub.active = false;
@@ -69,16 +69,16 @@ pub fn pause(
     e: &Env,
     subscriber: Address,
     plan_id: u64,
-) -> Result<(), SubstrataError> {
+) -> Result<(), SorobillError> {
     subscriber.require_auth();
 
     let mut sub = storage::load_sub(e, &subscriber, plan_id)
-        .ok_or(SubstrataError::SubscriptionNotFound)?;
+        .ok_or(SorobillError::SubscriptionNotFound)?;
     if !sub.active {
-        return Err(SubstrataError::SubscriptionInactive);
+        return Err(SorobillError::SubscriptionInactive);
     }
     if sub.paused {
-        return Err(SubstrataError::AlreadyPaused);
+        return Err(SorobillError::AlreadyPaused);
     }
 
     sub.paused = true;
@@ -95,19 +95,19 @@ pub fn resume(
     e: &Env,
     subscriber: Address,
     plan_id: u64,
-) -> Result<(), SubstrataError> {
+) -> Result<(), SorobillError> {
     subscriber.require_auth();
 
     let mut sub = storage::load_sub(e, &subscriber, plan_id)
-        .ok_or(SubstrataError::SubscriptionNotFound)?;
+        .ok_or(SorobillError::SubscriptionNotFound)?;
     if !sub.active {
-        return Err(SubstrataError::SubscriptionInactive);
+        return Err(SorobillError::SubscriptionInactive);
     }
     if !sub.paused {
-        return Err(SubstrataError::NotPaused);
+        return Err(SorobillError::NotPaused);
     }
 
-    let plan = storage::load_plan(e, plan_id).ok_or(SubstrataError::PlanNotFound)?;
+    let plan = storage::load_plan(e, plan_id).ok_or(SorobillError::PlanNotFound)?;
     let now = e.ledger().timestamp();
 
     sub.paused = false;
@@ -124,6 +124,6 @@ pub fn get_subscription(
     e: &Env,
     subscriber: &Address,
     plan_id: u64,
-) -> Result<Subscription, SubstrataError> {
-    storage::load_sub(e, subscriber, plan_id).ok_or(SubstrataError::SubscriptionNotFound)
+) -> Result<Subscription, SorobillError> {
+    storage::load_sub(e, subscriber, plan_id).ok_or(SorobillError::SubscriptionNotFound)
 }

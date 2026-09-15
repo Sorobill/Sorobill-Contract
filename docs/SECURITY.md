@@ -12,7 +12,7 @@
 
 **Please do not open a public GitHub issue for security vulnerabilities.**
 
-Send a private report to: **security@substrata.finance** (or open a [GitHub Security Advisory](https://github.com/your-org/Substrata-Contract/security/advisories/new)).
+Send a private report to: **security@sorobill.finance** (or open a [GitHub Security Advisory](https://github.com/Sorobill/Sorobill-Contract/security/advisories/new)).
 
 Include:
 - A clear description of the vulnerability
@@ -28,7 +28,7 @@ You will receive an acknowledgement within **48 hours** and a resolution timelin
 
 The following are in scope:
 
-- `contracts/substrata/src/` — all contract logic
+- `contracts/sorobill/src/` — all contract logic
 - Authorization bypass (admin, merchant, subscriber)
 - Double-charge or re-entrancy vectors
 - Token allowance drain beyond approved amount

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Initialize a deployed Substrata contract (set billing admin).
+# Initialize a deployed Sorobill contract (set billing admin).
 set -euo pipefail
 
 NETWORK="testnet"
-SOURCE="substrata-admin"
+SOURCE="sorobill-admin"
 CONTRACT_ID=""
 
 usage() {

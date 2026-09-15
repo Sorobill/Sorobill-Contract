@@ -1,6 +1,6 @@
-# Substrata — Architecture
+# Sorobill — Architecture
 
-This document describes the internal design of the Substrata smart contract: its module layout, storage model, data flow, and key design decisions.
+This document describes the internal design of the Sorobill smart contract: its module layout, storage model, data flow, and key design decisions.
 
 ---
 
@@ -26,7 +26,7 @@ This document describes the internal design of the Substrata smart contract: its
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Substrata Contract                      │
+│                     Sorobill Contract                      │
 │                                                             │
 │  ┌──────────┐  ┌──────────────┐  ┌──────────────────────┐  │
 │  │ plans.rs │  │subscriptions │  │     payments.rs      │  │
@@ -57,7 +57,7 @@ This document describes the internal design of the Substrata smart contract: its
 |---|---|
 | `lib.rs` | Public contract interface. Thin dispatch layer — no business logic. |
 | `types.rs` | All shared types: `Plan`, `Subscription`, `BillingInterval`, `DataKey`, `Events`. |
-| `errors.rs` | `SubstrataError` enum with `#[contracterror]`. |
+| `errors.rs` | `SorobillError` enum with `#[contracterror]`. |
 | `storage.rs` | Typed read/write helpers over `env.storage()`. No logic. |
 | `plans.rs` | Plan CRUD: create, update price, deactivate, get. |
 | `subscriptions.rs` | Subscribe, cancel, pause, resume, get. |
@@ -109,7 +109,7 @@ pub enum DataKey {
 
 ## Storage Strategy
 
-Soroban has three storage tiers. Substrata uses two:
+Soroban has three storage tiers. Sorobill uses two:
 
 | Tier | Used for | Rationale |
 |---|---|---|

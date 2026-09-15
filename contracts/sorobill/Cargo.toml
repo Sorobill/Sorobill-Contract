@@ -1,10 +1,10 @@
 [package]
-name = "substrata"
+name = "sorobill"
 version = "0.2.1"
 edition = "2021"
 description = "Decentralized subscription payment protocol on Stellar Soroban"
 license = "MIT"
-repository = "https://github.com/Recurraa/Substrata-Contract"
+repository = "https://github.com/Sorobill/Sorobill-Contract"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

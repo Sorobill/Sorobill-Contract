@@ -6,18 +6,18 @@ use soroban_sdk::{
     Address, Env, String,
 };
 
-use crate::{errors::SubstrataError, types::{BillingInterval, BillingOutcome}, SubstrataContract, SubstrataContractClient};
+use crate::{errors::SorobillError, types::{BillingInterval, BillingOutcome}, SorobillContract, SorobillContractClient};
 
 fn plan_name(e: &Env) -> String {
     String::from_str(e, "Pro Plan")
 }
 
-fn setup() -> (Env, SubstrataContractClient<'static>, Address, Address, Address) {
+fn setup() -> (Env, SorobillContractClient<'static>, Address, Address, Address) {
     let e = Env::default();
     e.mock_all_auths();
 
-    let contract_id = e.register(SubstrataContract, ());
-    let client = SubstrataContractClient::new(&e, &contract_id);
+    let contract_id = e.register(SorobillContract, ());
+    let client = SorobillContractClient::new(&e, &contract_id);
 
     let admin = Address::generate(&e);
     let merchant = Address::generate(&e);
@@ -77,7 +77,7 @@ fn test_create_plan_invalid_price() {
         .unwrap_err()
         .unwrap();
 
-    assert_eq!(err, SubstrataError::InvalidPrice.into());
+    assert_eq!(err, SorobillError::InvalidPrice.into());
 }
 
 #[test]
@@ -91,7 +91,7 @@ fn test_create_plan_empty_name() {
         .unwrap_err()
         .unwrap();
 
-    assert_eq!(err, SubstrataError::InvalidPlanName.into());
+    assert_eq!(err, SorobillError::InvalidPlanName.into());
 }
 
 #[test]
@@ -131,7 +131,7 @@ fn test_deactivate_plan_blocks_subscribe() {
         .unwrap_err()
         .unwrap();
 
-    assert_eq!(err, SubstrataError::PlanInactive.into());
+    assert_eq!(err, SorobillError::PlanInactive.into());
 }
 
 #[test]
@@ -194,7 +194,7 @@ fn test_double_subscribe_fails() {
         .unwrap_err()
         .unwrap();
 
-    assert_eq!(err, SubstrataError::AlreadySubscribed.into());
+    assert_eq!(err, SorobillError::AlreadySubscribed.into());
 }
 
 #[test]
@@ -260,7 +260,7 @@ fn test_billing_not_due() {
         .unwrap_err()
         .unwrap();
 
-    assert_eq!(err, SubstrataError::BillingNotDue.into());
+    assert_eq!(err, SorobillError::BillingNotDue.into());
 }
 
 #[test]
@@ -372,7 +372,7 @@ fn test_billing_blocked_while_paused() {
         .unwrap_err()
         .unwrap();
 
-    assert_eq!(err, SubstrataError::SubscriptionPaused.into());
+    assert_eq!(err, SorobillError::SubscriptionPaused.into());
 }
 
 #[test]
@@ -401,7 +401,7 @@ fn test_unauthorized_billing_rejected() {
         .unwrap_err()
         .unwrap();
 
-    assert_eq!(err, SubstrataError::Unauthorized.into());
+    assert_eq!(err, SorobillError::Unauthorized.into());
 }
 
 #[test]
@@ -415,7 +415,7 @@ fn test_double_initialize_fails() {
     let (e, client, _admin, _merchant, _sub) = setup();
     let other = Address::generate(&e);
     let err = client.try_initialize(&other).unwrap_err().unwrap();
-    assert_eq!(err, SubstrataError::AlreadyInitialized.into());
+    assert_eq!(err, SorobillError::AlreadyInitialized.into());
 }
 
 #[test]
@@ -434,7 +434,7 @@ fn test_custom_interval_zero_rejected() {
         .unwrap_err()
         .unwrap();
 
-    assert_eq!(err, SubstrataError::InvalidInterval.into());
+    assert_eq!(err, SorobillError::InvalidInterval.into());
 }
 
 #[test]
@@ -456,7 +456,7 @@ fn test_unauthorized_price_update() {
         .unwrap_err()
         .unwrap();
 
-    assert_eq!(err, SubstrataError::Unauthorized.into());
+    assert_eq!(err, SorobillError::Unauthorized.into());
 }
 
 

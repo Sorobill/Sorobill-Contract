@@ -1,8 +1,8 @@
-# Substrata
+# Sorobill
 
 > Stripe for recurring global payments — built on Stellar Soroban.
 
-Substrata is an open-source, decentralized subscription payment protocol. It lets merchants create on-chain subscription plans and lets users authorize recurring payments — all without a centralized payment processor.
+Sorobill is an open-source, decentralized subscription payment protocol. It lets merchants create on-chain subscription plans and lets users authorize recurring payments — all without a centralized payment processor.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-soroban-blueviolet)](https://soroban.stellar.org)
@@ -38,7 +38,7 @@ Substrata is an open-source, decentralized subscription payment protocol. It let
 
 ## Overview
 
-Substrata solves a fundamental gap in Web3: **recurring payments**. Traditional DeFi is transactional — every payment requires an active user signature. Substrata introduces a trust-minimized model where:
+Sorobill solves a fundamental gap in Web3: **recurring payments**. Traditional DeFi is transactional — every payment requires an active user signature. Sorobill introduces a trust-minimized model where:
 
 1. A **merchant** creates a subscription plan (price, interval, token).
 2. A **subscriber** approves the contract to spend tokens on their behalf (standard token allowance).
@@ -73,15 +73,15 @@ See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for a full breakdown of the contract
 ## Project Structure
 
 ```
-Substrata-Contract/
+Sorobill-Contract/
 ├── Cargo.toml                          # Workspace manifest
 ├── contracts/
-│   └── substrata/
+│   └── sorobill/
 │       ├── Cargo.toml
 │       └── src/
 │           ├── lib.rs                  # Contract entry point & public API
 │           ├── types.rs                # Shared types: Plan, Subscription, DataKey, Events
-│           ├── errors.rs               # SubstrataError enum
+│           ├── errors.rs               # SorobillError enum
 │           ├── storage.rs              # Thin storage helpers
 │           ├── plans.rs                # Plan CRUD logic
 │           ├── subscriptions.rs        # Subscribe / cancel / pause / resume
@@ -117,7 +117,7 @@ cargo build --target wasm32-unknown-unknown --release
 
 The compiled `.wasm` will be at:
 ```
-target/wasm32-unknown-unknown/release/substrata.wasm
+target/wasm32-unknown-unknown/release/sorobill.wasm
 ```
 
 ### Test
@@ -131,7 +131,7 @@ cargo test
 ```bash
 # Deploy to Testnet
 soroban contract deploy \
-  --wasm target/wasm32-unknown-unknown/release/substrata.wasm \
+  --wasm target/wasm32-unknown-unknown/release/sorobill.wasm \
   --source <YOUR_SECRET_KEY> \
   --network testnet
 
@@ -170,7 +170,7 @@ fn create_plan(
     price: i128,
     interval: BillingInterval,
     token: Address,
-) -> Result<u64, SubstrataError>
+) -> Result<u64, SorobillError>
 ```
 
 Creates a new subscription plan with a human-readable `name`. Returns the plan ID. `merchant` must sign.
@@ -185,7 +185,7 @@ Creates a new subscription plan with a human-readable `name`. Returns the plan I
 #### `update_plan_price`
 
 ```rust
-fn update_plan_price(e: Env, merchant: Address, plan_id: u64, new_price: i128) -> Result<(), SubstrataError>
+fn update_plan_price(e: Env, merchant: Address, plan_id: u64, new_price: i128) -> Result<(), SorobillError>
 ```
 
 Updates the price of an existing plan. Only the plan's merchant may call this.
@@ -193,7 +193,7 @@ Updates the price of an existing plan. Only the plan's merchant may call this.
 #### `deactivate_plan`
 
 ```rust
-fn deactivate_plan(e: Env, merchant: Address, plan_id: u64) -> Result<(), SubstrataError>
+fn deactivate_plan(e: Env, merchant: Address, plan_id: u64) -> Result<(), SorobillError>
 ```
 
 Prevents new subscriptions to this plan. Existing subscriptions continue until cancelled.
@@ -201,7 +201,7 @@ Prevents new subscriptions to this plan. Existing subscriptions continue until c
 #### `get_plan`
 
 ```rust
-fn get_plan(e: Env, plan_id: u64) -> Result<Plan, SubstrataError>
+fn get_plan(e: Env, plan_id: u64) -> Result<Plan, SorobillError>
 ```
 
 ---
@@ -211,7 +211,7 @@ fn get_plan(e: Env, plan_id: u64) -> Result<Plan, SubstrataError>
 #### `subscribe`
 
 ```rust
-fn subscribe(e: Env, subscriber: Address, plan_id: u64) -> Result<(), SubstrataError>
+fn subscribe(e: Env, subscriber: Address, plan_id: u64) -> Result<(), SorobillError>
 ```
 
 Subscribes the caller to a plan. The subscriber must have pre-approved the contract to spend at least `plan.price` of `plan.token` via the token's `approve` function.
@@ -219,7 +219,7 @@ Subscribes the caller to a plan. The subscriber must have pre-approved the contr
 #### `cancel`
 
 ```rust
-fn cancel(e: Env, subscriber: Address, plan_id: u64) -> Result<(), SubstrataError>
+fn cancel(e: Env, subscriber: Address, plan_id: u64) -> Result<(), SorobillError>
 ```
 
 Cancels an active subscription immediately.
@@ -227,7 +227,7 @@ Cancels an active subscription immediately.
 #### `pause`
 
 ```rust
-fn pause(e: Env, subscriber: Address, plan_id: u64) -> Result<(), SubstrataError>
+fn pause(e: Env, subscriber: Address, plan_id: u64) -> Result<(), SorobillError>
 ```
 
 Pauses billing. The subscription remains active but `execute_billing` will be rejected.
@@ -235,7 +235,7 @@ Pauses billing. The subscription remains active but `execute_billing` will be re
 #### `resume`
 
 ```rust
-fn resume(e: Env, subscriber: Address, plan_id: u64) -> Result<(), SubstrataError>
+fn resume(e: Env, subscriber: Address, plan_id: u64) -> Result<(), SorobillError>
 ```
 
 Resumes a paused subscription. Resets `next_billing` to `now + interval`.
@@ -243,7 +243,7 @@ Resumes a paused subscription. Resets `next_billing` to `now + interval`.
 #### `get_subscription`
 
 ```rust
-fn get_subscription(e: Env, subscriber: Address, plan_id: u64) -> Result<Subscription, SubstrataError>
+fn get_subscription(e: Env, subscriber: Address, plan_id: u64) -> Result<Subscription, SorobillError>
 ```
 
 ---
@@ -253,7 +253,7 @@ fn get_subscription(e: Env, subscriber: Address, plan_id: u64) -> Result<Subscri
 #### `get_admin`
 
 ```rust
-fn get_admin(e: Env) -> Result<Address, SubstrataError>
+fn get_admin(e: Env) -> Result<Address, SorobillError>
 ```
 
 #### `plan_count`
@@ -265,7 +265,7 @@ fn plan_count(e: Env) -> u64
 #### `reactivate_plan`
 
 ```rust
-fn reactivate_plan(e: Env, merchant: Address, plan_id: u64) -> Result<(), SubstrataError>
+fn reactivate_plan(e: Env, merchant: Address, plan_id: u64) -> Result<(), SorobillError>
 ```
 
 Re-enables a deactivated plan so new subscriptions can be created again.
@@ -282,7 +282,7 @@ fn execute_billing(
     caller: Address,
     subscriber: Address,
     plan_id: u64,
-) -> Result<BillingOutcome, SubstrataError>
+) -> Result<BillingOutcome, SorobillError>
 ```
 
 Triggers a billing cycle. Only the `admin` may call this. The contract uses `transfer_from` to move `plan.price` tokens from `subscriber` to `plan.merchant`.
@@ -301,7 +301,7 @@ On insufficient balance, `failed_attempts` is incremented. At 3 failures the sub
 
 ## Authorization Model
 
-Substrata uses the **token allowance pattern** (SEP-41 `approve` / `transfer_from`):
+Sorobill uses the **token allowance pattern** (SEP-41 `approve` / `transfer_from`):
 
 ```
 Subscriber → approve(contract, amount, expiry)  [once, off-chain or on-chain]
@@ -365,9 +365,9 @@ Subscribers retain full custody of their funds. The contract can only pull funds
 
 | Repo | Role |
 |------|------|
-| [Substrata-Contract](https://github.com/Recurraa/Substrata-Contract) | Soroban subscription protocol (this repo) |
-| [Substrata-Backend](https://github.com/Recurraa/Substrata-Backend) | Billing API, scheduler, webhooks |
-| [Substrata-Frontend](https://github.com/Recurraa/Substrata-Frontend) | Merchant + subscriber UI |
+| [Sorobill-Contract](https://github.com/Sorobill/Sorobill-Contract) | Soroban subscription protocol (this repo) |
+| [Sorobill-Backend](https://github.com/Sorobill/Sorobill-Backend) | Billing API, scheduler, webhooks |
+| [Sorobill-App](https://github.com/Sorobill/Sorobill-App) | Merchant + subscriber UI |
 
 ---
 
@@ -385,4 +385,4 @@ Please do not open public issues for security vulnerabilities. See [SECURITY.md]
 
 ## License
 
-[MIT](LICENSE) © Substrata Contributors
+[MIT](LICENSE) © Sorobill Contributors

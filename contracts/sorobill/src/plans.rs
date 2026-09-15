@@ -1,7 +1,7 @@
 use soroban_sdk::{Address, Env, String};
 
 use crate::{
-    errors::SubstrataError,
+    errors::SorobillError,
     storage,
     types::{BillingInterval, Events, Plan},
 };
@@ -14,18 +14,18 @@ pub fn create_plan(
     price: i128,
     interval: BillingInterval,
     token: Address,
-) -> Result<u64, SubstrataError> {
+) -> Result<u64, SorobillError> {
     merchant.require_auth();
 
     if price <= 0 {
-        return Err(SubstrataError::InvalidPrice);
+        return Err(SorobillError::InvalidPrice);
     }
     if name.len() == 0 {
-        return Err(SubstrataError::InvalidPlanName);
+        return Err(SorobillError::InvalidPlanName);
     }
     if let BillingInterval::Custom(s) = &interval {
         if *s == 0 {
-            return Err(SubstrataError::InvalidInterval);
+            return Err(SorobillError::InvalidInterval);
         }
     }
 
@@ -52,16 +52,16 @@ pub fn update_plan_price(
     merchant: Address,
     plan_id: u64,
     new_price: i128,
-) -> Result<(), SubstrataError> {
+) -> Result<(), SorobillError> {
     merchant.require_auth();
 
     if new_price <= 0 {
-        return Err(SubstrataError::InvalidPrice);
+        return Err(SorobillError::InvalidPrice);
     }
 
-    let mut plan = storage::load_plan(e, plan_id).ok_or(SubstrataError::PlanNotFound)?;
+    let mut plan = storage::load_plan(e, plan_id).ok_or(SorobillError::PlanNotFound)?;
     if plan.merchant != merchant {
-        return Err(SubstrataError::Unauthorized);
+        return Err(SorobillError::Unauthorized);
     }
 
     plan.price = new_price;
@@ -78,12 +78,12 @@ pub fn deactivate_plan(
     e: &Env,
     merchant: Address,
     plan_id: u64,
-) -> Result<(), SubstrataError> {
+) -> Result<(), SorobillError> {
     merchant.require_auth();
 
-    let mut plan = storage::load_plan(e, plan_id).ok_or(SubstrataError::PlanNotFound)?;
+    let mut plan = storage::load_plan(e, plan_id).ok_or(SorobillError::PlanNotFound)?;
     if plan.merchant != merchant {
-        return Err(SubstrataError::Unauthorized);
+        return Err(SorobillError::Unauthorized);
     }
 
     plan.active = false;
@@ -96,12 +96,12 @@ pub fn reactivate_plan(
     e: &Env,
     merchant: Address,
     plan_id: u64,
-) -> Result<(), SubstrataError> {
+) -> Result<(), SorobillError> {
     merchant.require_auth();
 
-    let mut plan = storage::load_plan(e, plan_id).ok_or(SubstrataError::PlanNotFound)?;
+    let mut plan = storage::load_plan(e, plan_id).ok_or(SorobillError::PlanNotFound)?;
     if plan.merchant != merchant {
-        return Err(SubstrataError::Unauthorized);
+        return Err(SorobillError::Unauthorized);
     }
 
     plan.active = true;
@@ -109,6 +109,6 @@ pub fn reactivate_plan(
     Ok(())
 }
 
-pub fn get_plan(e: &Env, plan_id: u64) -> Result<Plan, SubstrataError> {
-    storage::load_plan(e, plan_id).ok_or(SubstrataError::PlanNotFound)
+pub fn get_plan(e: &Env, plan_id: u64) -> Result<Plan, SorobillError> {
+    storage::load_plan(e, plan_id).ok_or(SorobillError::PlanNotFound)
 }

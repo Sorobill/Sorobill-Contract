@@ -3,7 +3,7 @@ use soroban_sdk::contracterror;
 #[contracterror]
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[repr(u32)]
-pub enum SubstrataError {
+pub enum SorobillError {
     Unauthorized = 1,
     PlanNotFound = 2,
     PlanInactive = 3,

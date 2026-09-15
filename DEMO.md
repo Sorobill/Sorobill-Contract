@@ -1,10 +1,10 @@
-# Substrata Contract Demo
+# Sorobill Contract Demo
 
 ## Prerequisites
 
 - Rust + `wasm32-unknown-unknown`
 - [Stellar CLI](https://developers.stellar.org/docs/tools/cli)
-- Funded testnet identity: `stellar keys generate substrata-admin --network testnet --fund`
+- Funded testnet identity: `stellar keys generate sorobill-admin --network testnet --fund`
 
 ## Build & test
 
@@ -16,9 +16,9 @@ make build
 ## Deploy to testnet
 
 ```bash
-make deploy NETWORK=testnet SOURCE=substrata-admin
+make deploy NETWORK=testnet SOURCE=sorobill-admin
 # note the Contract ID
-make init NETWORK=testnet SOURCE=substrata-admin
+make init NETWORK=testnet SOURCE=sorobill-admin
 # then update DEPLOYMENTS.md
 ```
 
@@ -35,6 +35,6 @@ stellar contract invoke --id $CONTRACT_ID --source subscriber --network testnet 
   subscribe --subscriber $SUB --plan_id 0
 
 # Bill (admin only)
-stellar contract invoke --id $CONTRACT_ID --source substrata-admin --network testnet -- \
+stellar contract invoke --id $CONTRACT_ID --source sorobill-admin --network testnet -- \
   execute_billing --caller $ADMIN --subscriber $SUB --plan_id 0
 ```

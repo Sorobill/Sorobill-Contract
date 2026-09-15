@@ -1,7 +1,7 @@
 use soroban_sdk::{token, Address, Env};
 
 use crate::{
-    errors::SubstrataError,
+    errors::SorobillError,
     storage,
     types::{BillingOutcome, Events},
 };
@@ -20,30 +20,30 @@ pub fn execute_billing(
     caller: Address,
     subscriber: Address,
     plan_id: u64,
-) -> Result<BillingOutcome, SubstrataError> {
+) -> Result<BillingOutcome, SorobillError> {
     let admin = storage::get_admin(e);
     if caller != admin {
-        return Err(SubstrataError::Unauthorized);
+        return Err(SorobillError::Unauthorized);
     }
     caller.require_auth();
 
     let mut sub = storage::load_sub(e, &subscriber, plan_id)
-        .ok_or(SubstrataError::SubscriptionNotFound)?;
+        .ok_or(SorobillError::SubscriptionNotFound)?;
 
     if !sub.active {
-        return Err(SubstrataError::SubscriptionInactive);
+        return Err(SorobillError::SubscriptionInactive);
     }
     if sub.paused {
-        return Err(SubstrataError::SubscriptionPaused);
+        return Err(SorobillError::SubscriptionPaused);
     }
 
     let now = e.ledger().timestamp();
 
     if now < sub.next_billing {
-        return Err(SubstrataError::BillingNotDue);
+        return Err(SorobillError::BillingNotDue);
     }
 
-    let plan = storage::load_plan(e, plan_id).ok_or(SubstrataError::PlanNotFound)?;
+    let plan = storage::load_plan(e, plan_id).ok_or(SorobillError::PlanNotFound)?;
     let token_client = token::Client::new(e, &plan.token);
 
     let balance = token_client.balance(&subscriber);

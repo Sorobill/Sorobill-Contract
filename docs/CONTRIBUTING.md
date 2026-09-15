@@ -1,6 +1,6 @@
-# Contributing to Substrata
+# Contributing to Sorobill
 
-Thank you for your interest in contributing! Substrata is an open-source project and we welcome contributions of all kinds — bug fixes, new features, documentation improvements, and test coverage.
+Thank you for your interest in contributing! Sorobill is an open-source project and we welcome contributions of all kinds — bug fixes, new features, documentation improvements, and test coverage.
 
 ---
 
@@ -33,12 +33,12 @@ This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.
 1. Fork the repository on GitHub.
 2. Clone your fork:
    ```bash
-   git clone https://github.com/<your-username>/Substrata-Contract.git
-   cd Substrata-Contract
+   git clone https://github.com/<your-username>/Sorobill-Contract.git
+   cd Sorobill-Contract
    ```
 3. Add the upstream remote:
    ```bash
-   git remote add upstream https://github.com/your-org/Substrata-Contract.git
+   git remote add upstream https://github.com/Sorobill/Sorobill-Contract.git
    ```
 
 ---
@@ -151,7 +151,7 @@ cargo test -- --nocapture
 
 ## Reporting Bugs
 
-Open a [GitHub Issue](https://github.com/your-org/Substrata-Contract/issues) with:
+Open a [GitHub Issue](https://github.com/Sorobill/Sorobill-Contract/issues) with:
 
 - A clear title
 - Steps to reproduce

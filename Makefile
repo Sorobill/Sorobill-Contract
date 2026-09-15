@@ -1,8 +1,8 @@
 .PHONY: build test clean deploy init fmt check
 
-CONTRACT := substrata
+CONTRACT := sorobill
 NETWORK ?= testnet
-SOURCE ?= substrata-admin
+SOURCE ?= sorobill-admin
 
 build:
 	@if command -v stellar >/dev/null 2>&1; then \

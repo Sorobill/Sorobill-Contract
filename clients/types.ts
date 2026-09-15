@@ -1,9 +1,9 @@
 /**
- * Thin TypeScript helpers for invoking the Substrata Soroban contract.
- * Used by Substrata-Backend and Substrata-Frontend.
+ * Thin TypeScript helpers for invoking the Sorobill Soroban contract.
+ * Used by Sorobill-Backend and Sorobill-App.
  */
 
-export const SUBSTRATA_CONTRACT_METHODS = [
+export const SOROBILL_CONTRACT_METHODS = [
   "initialize",
   "get_admin",
   "plan_count",
@@ -20,7 +20,7 @@ export const SUBSTRATA_CONTRACT_METHODS = [
   "execute_billing",
 ] as const;
 
-export type SubstrataMethod = (typeof SUBSTRATA_CONTRACT_METHODS)[number];
+export type SorobillMethod = (typeof SOROBILL_CONTRACT_METHODS)[number];
 
 export type BillingInterval =
   | { tag: "Daily" }
