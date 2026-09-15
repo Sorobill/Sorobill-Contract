@@ -11,6 +11,7 @@ pub fn create_plan(
     e: &Env,
     merchant: Address,
     name: String,
+    description: String,
     price: i128,
     interval: BillingInterval,
     token: Address,
@@ -33,6 +34,7 @@ pub fn create_plan(
     let plan = Plan {
         merchant: merchant.clone(),
         name,
+        description,
         price,
         interval,
         token,
