@@ -172,13 +172,14 @@ fn create_plan(
     e: Env,
     merchant: Address,
     name: String,
+    description: String,
     price: i128,
     interval: BillingInterval,
     token: Address,
 ) -> Result<u64, SorobillError>
 ```
 
-Creates a new subscription plan with a human-readable `name`. Returns the plan ID. `merchant` must sign.
+Creates a new subscription plan with a human-readable `name` and optional `description`. Returns the plan ID. `merchant` must sign.
 
 **`BillingInterval` variants:**
 - `Daily` — 86,400 seconds
@@ -300,7 +301,7 @@ Returns `BillingOutcome::Paid` or `BillingOutcome::Failed`. Insufficient balance
 3. `now >= next_billing` (prevents double-charge)
 4. Subscriber balance must be ≥ plan price
 
-On insufficient balance, `failed_attempts` is incremented. At 3 failures the subscription is auto-cancelled.
+On insufficient balance, `failed_attempts` is incremented. After max failures the subscription enters a configurable grace window (`set_grace_period` / `grace_deadline`); when grace is `0` it cancels immediately. See [docs/GRACE_PERIOD.md](docs/GRACE_PERIOD.md).
 
 ---
 
@@ -357,12 +358,12 @@ Subscribers retain full custody of their funds. The contract can only pull funds
 
 ## Roadmap
 
-- [ ] Grace period before auto-cancel
+- [x] Grace period before auto-cancel
 - [ ] Prorated billing on plan price changes
 - [ ] Subscriber-side billing self-trigger
 - [ ] Multi-sig admin / DAO governance
 - [ ] Soroban contract upgrade path
-- [ ] SDK / client library (TypeScript)
+- [x] SDK / client library (TypeScript stubs; bindings generation next)
 
 ---
 
