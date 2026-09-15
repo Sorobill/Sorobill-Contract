@@ -32,6 +32,7 @@ pub fn subscribe(
         failed_attempts: 0,
         last_charged: now,
         paused: false,
+        grace_deadline: 0,
     };
     storage::save_sub(e, &sub);
 
