@@ -64,3 +64,7 @@ We follow **coordinated disclosure**:
 ## Testnet deployments
 
 Testnet contracts are for integration testing only. Do not send mainnet funds to testnet addresses.
+
+## Grace period
+
+Failed billing may keep a subscription active until `grace_deadline`. Operators should monitor `payment_failed` and `sub_cancelled` events. See `THREAT_MODEL.md`.
