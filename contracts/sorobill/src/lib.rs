@@ -1,5 +1,6 @@
 #![no_std]
 
+mod constants;
 mod errors;
 mod payments;
 mod plans;
@@ -12,6 +13,7 @@ mod tests;
 
 use soroban_sdk::{contract, contractimpl, Address, Env, String};
 
+use constants::CONTRACT_VERSION;
 use errors::SorobillError;
 use types::{BillingInterval, BillingOutcome, Plan, Subscription};
 
@@ -40,9 +42,36 @@ impl SorobillContract {
         Ok(storage::get_admin(&e))
     }
 
+    /// Semver of this contract build.
+    pub fn version(_e: Env) -> String {
+        String::from_str(&_e, CONTRACT_VERSION)
+    }
+
+    /// Configure grace seconds after max failed attempts (admin only).
+    pub fn set_grace_period(e: Env, caller: Address, secs: u64) -> Result<(), SorobillError> {
+        let admin = storage::get_admin(&e);
+        if caller != admin {
+            return Err(SorobillError::Unauthorized);
+        }
+        caller.require_auth();
+        storage::set_grace_secs(&e, secs);
+        Ok(())
+    }
+
+    pub fn get_grace_period(e: Env) -> u64 {
+        storage::get_grace_secs(&e)
+    }
+
     /// Total number of plans ever created.
     pub fn plan_count(e: Env) -> u64 {
         storage::plan_count(&e)
+    }
+
+    /// True if subscriber has an active (possibly paused) subscription record.
+    pub fn is_subscribed(e: Env, subscriber: Address, plan_id: u64) -> bool {
+        storage::load_sub(&e, &subscriber, plan_id)
+            .map(|s| s.active)
+            .unwrap_or(false)
     }
 
     // ── Plan Management ───────────────────────────────────────────────────────
@@ -51,11 +80,12 @@ impl SorobillContract {
         e: Env,
         merchant: Address,
         name: String,
+        description: String,
         price: i128,
         interval: BillingInterval,
         token: Address,
     ) -> Result<u64, SorobillError> {
-        plans::create_plan(&e, merchant, name, price, interval, token)
+        plans::create_plan(&e, merchant, name, description, price, interval, token)
     }
 
     pub fn update_plan_price(
