@@ -101,4 +101,10 @@ impl Events {
     pub fn plan_updated(e: &soroban_sdk::Env) -> Symbol {
         Symbol::new(e, "plan_updated")
     }
+    pub fn plan_deactivated(e: &soroban_sdk::Env) -> Symbol {
+        Symbol::new(e, "plan_deactivated")
+    }
+    pub fn plan_reactivated(e: &soroban_sdk::Env) -> Symbol {
+        Symbol::new(e, "plan_reactivated")
+    }
 }

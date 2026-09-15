@@ -90,6 +90,10 @@ pub fn deactivate_plan(
 
     plan.active = false;
     storage::save_plan(e, plan_id, &plan);
+
+    e.events()
+        .publish((Events::plan_deactivated(e), merchant, plan_id), false);
+
     Ok(())
 }
 
@@ -108,6 +112,10 @@ pub fn reactivate_plan(
 
     plan.active = true;
     storage::save_plan(e, plan_id, &plan);
+
+    e.events()
+        .publish((Events::plan_reactivated(e), merchant, plan_id), true);
+
     Ok(())
 }
 
