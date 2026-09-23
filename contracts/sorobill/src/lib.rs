@@ -91,6 +91,8 @@ impl SorobillContract {
 
     // ── Plan Management ───────────────────────────────────────────────────────
 
+    /// Create a merchant plan. `name` required; `description` may be empty.
+    /// Rejects non-positive price and `Custom(0)` intervals.
     pub fn create_plan(
         e: Env,
         merchant: Address,
