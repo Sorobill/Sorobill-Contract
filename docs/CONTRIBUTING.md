@@ -118,6 +118,9 @@ refactor: extract token transfer helper
 
 ## Testing
 
+Run `make verify` (or `cargo test -p sorobill && cargo check -p sorobill`) before opening a PR.
+
+
 Every change to contract logic must include or update tests in `tests.rs`.
 
 - Use `Env::default()` + `mock_all_auths()` for unit-style tests.
