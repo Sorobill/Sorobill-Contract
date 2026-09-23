@@ -158,6 +158,7 @@ impl SorobillContract {
         subscriptions::cancel(&e, subscriber, plan_id)
     }
 
+    /// Pause billing; `execute_billing` returns `SubscriptionPaused` until resume.
     pub fn pause(
         e: Env,
         subscriber: Address,
