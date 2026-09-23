@@ -1,4 +1,6 @@
 //! Shared protocol constants for Sorobill.
+//!
+//! These values are also mirrored in TypeScript stubs under `clients/`.
 
 /// Auto-cancel after this many consecutive failed billing attempts
 /// (subject to grace period when configured).
