@@ -10,6 +10,7 @@
 - [Billing outcome](BILLING_OUTCOME.md)
 - [Intervals](INTERVALS.md)
 - [Events](EVENTS.md)
+- [Event schema](EVENT_SCHEMA.md)
 - [Error catalog](ERROR_CATALOG.md)
 - [Exports](EXPORTS.md)
 - [API quick reference](API_QUICKREF.md)
