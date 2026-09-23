@@ -140,6 +140,7 @@ impl SorobillContract {
 
     // ── Subscription Management ───────────────────────────────────────────────
 
+    /// Subscribe to an active plan. First billing is due after one interval.
     pub fn subscribe(
         e: Env,
         subscriber: Address,
