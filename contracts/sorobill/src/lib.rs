@@ -187,6 +187,7 @@ impl SorobillContract {
 
     // ── Payment Execution ─────────────────────────────────────────────────────
 
+    /// Admin billing trigger. Returns `Paid`/`Failed` so failure state commits.
     pub fn execute_billing(
         e: Env,
         caller: Address,
