@@ -26,6 +26,9 @@ mod outcome_tests;
 #[cfg(test)]
 mod interval_eq_tests;
 
+#[cfg(test)]
+mod error_catalog_tests;
+
 use soroban_sdk::{contract, contractimpl, Address, Env, String};
 
 use constants::CONTRACT_VERSION;
