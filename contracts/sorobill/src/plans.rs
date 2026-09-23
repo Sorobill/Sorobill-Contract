@@ -1,3 +1,5 @@
+//! Plan lifecycle: create, price update, deactivate/reactivate, get.
+
 use soroban_sdk::{Address, Env, String};
 
 use crate::{
