@@ -1,3 +1,7 @@
+//! Typed storage helpers over instance and persistent maps.
+//!
+//! No business logic lives here — see `docs/STORAGE.md` for key layout.
+
 use soroban_sdk::{Address, Env};
 
 use crate::types::{DataKey, Plan, Subscription};
