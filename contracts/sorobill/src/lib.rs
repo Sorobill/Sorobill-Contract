@@ -149,6 +149,7 @@ impl SorobillContract {
         subscriptions::subscribe(&e, subscriber, plan_id)
     }
 
+    /// Cancel an active subscription (leaves the storage row in place).
     pub fn cancel(
         e: Env,
         subscriber: Address,
