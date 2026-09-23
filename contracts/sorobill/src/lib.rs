@@ -73,6 +73,7 @@ impl SorobillContract {
         Ok(())
     }
 
+    /// Global grace seconds after max failures (default 172800 if unset).
     pub fn get_grace_period(e: Env) -> u64 {
         storage::get_grace_secs(&e)
     }
