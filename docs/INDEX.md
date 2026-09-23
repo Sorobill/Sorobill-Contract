@@ -4,6 +4,7 @@
 
 - [Architecture](ARCHITECTURE.md)
 - [Billing flow](BILLING_FLOW.md)
+- [Billing diagram](BILLING_DIAGRAM.md)
 - [State machine](STATE_MACHINE.md)
 - [Grace period](GRACE_PERIOD.md)
 - [Billing outcome](BILLING_OUTCOME.md)
