@@ -1,3 +1,5 @@
+//! Subscription lifecycle: subscribe, cancel, pause, resume, get.
+
 use soroban_sdk::{Address, Env};
 
 use crate::{
