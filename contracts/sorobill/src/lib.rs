@@ -14,6 +14,9 @@ mod tests;
 #[cfg(test)]
 mod interval_tests;
 
+#[cfg(test)]
+mod error_tests;
+
 use soroban_sdk::{contract, contractimpl, Address, Env, String};
 
 use constants::CONTRACT_VERSION;
