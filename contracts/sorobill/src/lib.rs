@@ -115,6 +115,7 @@ impl SorobillContract {
         plans::update_plan_price(&e, merchant, plan_id, new_price)
     }
 
+    /// Deactivate a plan so new subscriptions are rejected (`PlanInactive`).
     pub fn deactivate_plan(
         e: Env,
         merchant: Address,
