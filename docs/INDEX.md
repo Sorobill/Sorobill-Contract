@@ -31,6 +31,7 @@
 - [SDK usage](SDK_USAGE.md)
 - [Bindings](BINDINGS.md)
 - [FAQ](FAQ.md)
+- [Troubleshooting](TROUBLESHOOTING.md)
 - [Glossary](GLOSSARY.md)
 - [Migration 0.3](MIGRATION_0.3.md)
 - [Testing](TESTING.md)
