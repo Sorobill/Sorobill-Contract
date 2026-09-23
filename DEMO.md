@@ -1,15 +1,26 @@
 # Sorobill Contract Demo
 
+## Sister projects
+
+| Repo / surface | Role |
+|---|---|
+| This repo (`Sorobill-Contract`) | On-chain subscription protocol |
+| Sorobill-Backend | Billing scheduler / admin invoker |
+| Sorobill-App | Merchant & subscriber UI |
+| Live UI | https://sorobill-app.vercel.app |
+
+See `DEPLOYMENTS.md` for the testnet contract id consumed by the live UI.
+
 ## Prerequisites
 
-- Rust + `wasm32-unknown-unknown`
+- Rust + `wasm32-unknown-unknown` (and Stellar CLI for `wasm32v1-none`)
 - [Stellar CLI](https://developers.stellar.org/docs/tools/cli)
 - Funded testnet identity: `stellar keys generate sorobill-admin --network testnet --fund`
 
 ## Build & test
 
 ```bash
-make test
+make verify
 make build
 ```
 
@@ -27,7 +38,7 @@ make init NETWORK=testnet SOURCE=sorobill-admin
 ```bash
 # Create a plan (merchant signs)
 stellar contract invoke --id $CONTRACT_ID --source merchant --network testnet -- \
-  create_plan --merchant $MERCHANT --name "Pro" --price 10000000 \
+  create_plan --merchant $MERCHANT --name "Pro" --description "" --price 10000000 \
   --interval '{"tag":"Monthly"}' --token $USDC
 
 # Subscribe
