@@ -39,3 +39,4 @@
 - [Changelog](CHANGELOG.md)
 - [Release notes 0.3.0](RELEASE_NOTES_0.3.0.md)
 - [ADR 001 Grace](ADR_001_GRACE.md)
+- [Makefile targets](MAKEFILE.md)
