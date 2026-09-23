@@ -105,6 +105,7 @@ impl SorobillContract {
         plans::create_plan(&e, merchant, name, description, price, interval, token)
     }
 
+    /// Merchant-only price update; applies on the next successful charge.
     pub fn update_plan_price(
         e: Env,
         merchant: Address,
