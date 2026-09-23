@@ -133,6 +133,7 @@ impl SorobillContract {
         plans::reactivate_plan(&e, merchant, plan_id)
     }
 
+    /// Read a plan by id, including name and description fields.
     pub fn get_plan(e: Env, plan_id: u64) -> Result<Plan, SorobillError> {
         plans::get_plan(&e, plan_id)
     }
