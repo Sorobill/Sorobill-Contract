@@ -4,7 +4,9 @@
 
 | Version | Supported |
 |---|---|
-| 0.1.x | ✅ |
+| 0.3.x | ✅ |
+| 0.2.x | ✅ |
+| 0.1.x | security fixes only |
 
 ---
 
@@ -68,3 +70,7 @@ Testnet contracts are for integration testing only. Do not send mainnet funds to
 ## Grace period
 
 Failed billing may keep a subscription active until `grace_deadline`. Operators should monitor `payment_failed` and `sub_cancelled` events. See `THREAT_MODEL.md`.
+
+## Live demo
+
+Testnet UI: https://sorobill-app.vercel.app
