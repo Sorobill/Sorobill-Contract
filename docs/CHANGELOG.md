@@ -10,6 +10,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Planned
+- Live demo UI polish at https://sorobill-app.vercel.app
 - Prorated billing when plan price changes mid-cycle
 - Subscriber-side self-billing trigger
 - Multi-sig admin / DAO governance
@@ -22,6 +23,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 - Plan `description` field on `create_plan`
+- Documentation suite under `docs/` (grace, events, billing flow, FAQ)
 - Configurable grace period (`set_grace_period` / `get_grace_period`)
 - `Subscription.grace_deadline` for delayed auto-cancel
 - `version` and `is_subscribed` view functions
