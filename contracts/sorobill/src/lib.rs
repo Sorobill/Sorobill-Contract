@@ -176,6 +176,7 @@ impl SorobillContract {
         subscriptions::resume(&e, subscriber, plan_id)
     }
 
+    /// Fetch subscription state including grace and failure counters.
     pub fn get_subscription(
         e: Env,
         subscriber: Address,
