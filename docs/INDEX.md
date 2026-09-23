@@ -21,6 +21,8 @@
 - [Threat model](THREAT_MODEL.md)
 - [Operators](OPERATORS.md)
 - [Admin](ADMIN.md)
+- [Keep-alive / TTL](KEEP_ALIVE.md)
+- [Monitoring](MONITORING.md)
 
 ## Integrators
 
