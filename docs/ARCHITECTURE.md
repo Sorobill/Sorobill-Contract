@@ -218,3 +218,18 @@ Events are published via `env.events().publish(topics, data)`. Topics are tuples
 ## Grace period (0.3)
 
 See [GRACE_PERIOD.md](GRACE_PERIOD.md). Storage key `GraceSecs` is instance-scoped; each subscription stores `grace_deadline`.
+
+---
+
+## Grace path (0.3)
+
+```text
+failed_attempts >= MAX_FAILED_ATTEMPTS
+        |
+        +-- grace_secs == 0 --> active=false (immediate cancel)
+        |
+        +-- grace_secs  > 0 --> grace_deadline = now + grace_secs
+                                 (cancel on later bill when now >= deadline)
+```
+
+Successful `Paid` clears both counters and grace. See `GRACE_PERIOD.md`.
