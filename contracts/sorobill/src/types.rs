@@ -1,3 +1,5 @@
+//! Shared contract types: intervals, plans, subscriptions, events, keys.
+
 use soroban_sdk::{contracttype, Address, String, Symbol};
 
 /// Supported billing intervals (in seconds).
