@@ -377,6 +377,10 @@ Subscribers retain full custody of their funds. The contract can only pull funds
 
 ---
 
+## Documentation
+
+Start at [docs/INDEX.md](docs/INDEX.md) for the full guide map.
+
 ## Contributing
 
 We welcome contributions of all kinds. See [CONTRIBUTING.md](docs/CONTRIBUTING.md) to get started.
