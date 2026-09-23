@@ -124,6 +124,7 @@ impl SorobillContract {
         plans::deactivate_plan(&e, merchant, plan_id)
     }
 
+    /// Reactivate a previously deactivated plan for new subscribers.
     pub fn reactivate_plan(
         e: Env,
         merchant: Address,
