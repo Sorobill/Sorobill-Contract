@@ -1,3 +1,7 @@
+//! Billing execution: admin auth, due checks, grace cancel, token transfer.
+//!
+//! Insufficient balance returns `Ok(Failed)` so counters commit on-chain.
+
 use soroban_sdk::{token, Address, Env};
 
 use crate::{
