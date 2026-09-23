@@ -12,6 +12,7 @@
 - [Events](EVENTS.md)
 - [Error catalog](ERROR_CATALOG.md)
 - [Exports](EXPORTS.md)
+- [API quick reference](API_QUICKREF.md)
 - [Storage](STORAGE.md)
 - [Auth model](AUTH_MODEL.md)
 
