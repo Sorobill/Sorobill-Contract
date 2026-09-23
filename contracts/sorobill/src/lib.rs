@@ -167,6 +167,7 @@ impl SorobillContract {
         subscriptions::pause(&e, subscriber, plan_id)
     }
 
+    /// Resume a paused subscription and reset `next_billing` from now.
     pub fn resume(
         e: Env,
         subscriber: Address,
