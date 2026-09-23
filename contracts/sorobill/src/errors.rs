@@ -1,3 +1,7 @@
+//! Contract error codes returned to callers and indexers.
+//!
+//! See `docs/ERROR_CATALOG.md` for recovery guidance per code.
+
 use soroban_sdk::contracterror;
 
 #[contracterror]
