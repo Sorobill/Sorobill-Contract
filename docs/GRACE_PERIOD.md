@@ -14,3 +14,25 @@ subscription alive for a **grace window** before auto-cancel.
    (`active = false`) and returns `Failed`.
 
 Set grace to `0` to restore immediate auto-cancel after 3 failures.
+
+## Timeline
+
+```text
+t0  subscribe (active, failed_attempts=0, grace_deadline=0)
+t1  bill fail #1  → failed_attempts=1
+t2  bill fail #2  → failed_attempts=2
+t3  bill fail #3  → failed_attempts=3, grace_deadline=t3+grace
+t4  bill attempt while t4 < grace_deadline → Failed (still active)
+t5  bill attempt while t5 >= grace_deadline → cancel, Failed
+```
+
+## Successful recovery
+
+If a charge succeeds while grace is active, the contract clears
+`failed_attempts` and `grace_deadline` and advances `next_billing`.
+
+## Related
+
+- ADR: `ADR_001_GRACE.md`
+- Constants: `DEFAULT_GRACE_SECS`, `MAX_FAILED_ATTEMPTS`
+- Operators: `OPERATORS.md`
