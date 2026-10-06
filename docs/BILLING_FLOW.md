@@ -36,4 +36,4 @@ End-to-end path from allowance approval to on-chain settlement.
 5. If balance &lt; price → record failure (possibly enter grace / cancel).
 6. Else transfer and mark `Paid`.
 
-See also `BILLING_OUTCOME.md` and `STATE_MACHINE.md`.
+See also [`BILLING_DIAGRAM.md`](BILLING_DIAGRAM.md) for the complete interactive Mermaid sequence diagram, as well as `BILLING_OUTCOME.md` and `STATE_MACHINE.md`.
