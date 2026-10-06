@@ -6,6 +6,7 @@ Thank you for your interest in contributing! Sorobill is an open-source project 
 
 ## Table of Contents
 
+- [Pre-PR Verification Checklist](#pre-pr-verification-checklist)
 - [Code of Conduct](#code-of-conduct)
 - [Getting Started](#getting-started)
 - [Development Setup](#development-setup)
@@ -19,6 +20,19 @@ Thank you for your interest in contributing! Sorobill is an open-source project 
 - [Reporting Bugs](#reporting-bugs)
 - [Suggesting Features](#suggesting-features)
 - [Security Issues](#security-issues)
+
+---
+
+## Pre-PR Verification Checklist
+
+Before submitting a Pull Request, ensure all items below are fulfilled:
+
+- [ ] **Run `make verify`**: Run `make verify` (or `cargo test -p sorobill` + `cargo check -p sorobill`) to ensure all contract tests and compile checks pass cleanly.
+- [ ] **Formatting & Linting**: Run `cargo fmt --all --check` to confirm formatting compliance.
+- [ ] **Update Documentation**: If any public contract methods, storage types, or error variants change, update the corresponding documentation files in `docs/` (such as `docs/API_QUICKREF.md`, `docs/ARCHITECTURE.md`, or `docs/ERROR_CATALOG.md`).
+- [ ] **Link Sister Repos & Deployments**: Reference [Sorobill-Backend](https://github.com/Sorobill/Sorobill-Backend) and [Sorobill-App](https://github.com/Sorobill/Sorobill-App) when cross-cutting changes occur, and update `DEPLOYMENTS.md` when updating contract deployments.
+- [ ] **Testnet-Only for Live Demos**: All live demos, end-to-end trials, and manual wallet verifications must use **Stellar Testnet only** (`--network testnet`). Never run unvetted scripts or transactions against mainnet.
+- [ ] **Link Issue Reference**: Include `Closes #<issue_number>` in your PR description.
 
 ---
 
