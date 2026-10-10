@@ -30,3 +30,12 @@ Any SEP-41 (Soroban token interface) asset the subscriber can approve.
 
 **Where is the live demo UI?**  
 https://sorobill-app.vercel.app (testnet). Contract IDs are in `DEPLOYMENTS.md`.
+
+**Why is Freighter failing to sign or showing network errors in the demo?**  
+Freighter must be explicitly configured to **Testnet** under Settings > Network. If Freighter is set to Mainnet or Futurenet, transaction simulations and signature prompts targeting the Testnet deployment will fail. The live demo is available at [sorobill-app.vercel.app](https://sorobill-app.vercel.app).
+
+**What if the demo app fails with contract not found or stale method errors?**  
+Ensure your environment variable `NEXT_PUBLIC_SUBSCRIPTION_CONTRACT_ID` matches the active contract ID deployed in [`DEPLOYMENTS.md`](../DEPLOYMENTS.md). Stale or mismatched contract IDs will cause transaction invocations to revert.
+
+**Where can I verify contract deployments and initialization transactions on-chain?**  
+All deployed contract instances and initialization transactions can be inspected on [Stellar Expert Testnet](https://stellar.expert/explorer/testnet) by searching the contract ID or deployment account address documented in [`DEPLOYMENTS.md`](../DEPLOYMENTS.md).
